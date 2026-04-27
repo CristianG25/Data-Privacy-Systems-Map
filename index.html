@@ -190,6 +190,24 @@
     .info-chip:hover { filter: brightness(.94); transform: translateY(-1px); }
     .info-chip-dot { width: 7px; height: 7px; border-radius: 50%; }
 
+    .conn-desc-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #f5f5f5;
+      font-size: 11px; line-height: 1.5;
+    }
+    .conn-desc-item:last-child { border-bottom: none; }
+    .conn-desc-header {
+      display: flex; align-items: center; gap: 6px; margin-bottom: 2px;
+    }
+    .conn-desc-dir { font-size: 10px; color: #aaa; flex-shrink: 0; }
+    .conn-desc-name { font-weight: 600; color: #111; font-size: 11px; }
+    .conn-desc-type {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .05em; padding: 1px 5px; border-radius: 4px;
+      background: #f0f0f0; color: #777; flex-shrink: 0;
+    }
+    .conn-desc-text { color: #666; font-size: 11px; }
+
     /* ─── GRAPH ──────────────────────────────────────────── */
     #graph-wrap { flex: 1; position: relative; }
     #graph-wrap svg { width: 100%; height: 100%; }
@@ -217,8 +235,8 @@
     .node-g circle { transition: r .15s; }
     .node-g:hover circle { r: 11px; }
     .node-label {
-      font-size: 14px; font-weight: 600;
-      pointer-events: none; user-select: none;
+      font-size: 11px; font-weight: 600;
+      pointer-events: none; user-select: none; dominant-baseline: auto;
     }
 
     /* ─── CONTROLS ───────────────────────────────────────── */
@@ -563,31 +581,31 @@
 const CAT = {
   "Users": {
     color: "#1565c0", light: "#e3f0fb",
-    cx: .14, cy: .32, xyStrength: 0.65, clusterStrength: 0.55
+    cx: .08, cy: .30, xyStrength: 0.72, clusterStrength: 0.62
   },
   "Tech Platforms": {
     color: "#283593", light: "#e8eaf6",
-    cx: .50, cy: .26, xyStrength: 0.70, clusterStrength: 0.60
+    cx: .50, cy: .16, xyStrength: 0.72, clusterStrength: 0.65
   },
   "Advertisers": {
     color: "#bf360c", light: "#fbe9e7",
-    cx: .86, cy: .32, xyStrength: 0.65, clusterStrength: 0.55
+    cx: .92, cy: .30, xyStrength: 0.72, clusterStrength: 0.62
   },
   "Governments": {
     color: "#37474f", light: "#eceff1",
-    cx: .22, cy: .66, xyStrength: 0.60, clusterStrength: 0.50
+    cx: .16, cy: .65, xyStrength: 0.88, clusterStrength: 0.78
   },
   "Regulators": {
     color: "#37474f", light: "#eceff1",
-    cx: .50, cy: .70, xyStrength: 0.60, clusterStrength: 0.50
+    cx: .50, cy: .57, xyStrength: 0.88, clusterStrength: 0.78
   },
   "Civil Society": {
     color: "#37474f", light: "#eceff1",
-    cx: .78, cy: .66, xyStrength: 0.60, clusterStrength: 0.50
+    cx: .78, cy: .57, xyStrength: 0.88, clusterStrength: 0.78
   },
   "Data Cooperatives": {
     color: "#2e7d32", light: "#e8f5e9",
-    cx: .50, cy: .88, xyStrength: 0.65, clusterStrength: 0.55,
+    cx: .50, cy: .88, xyStrength: 0.80, clusterStrength: 0.68,
     sub: "Intervention Point"
   }
 };
@@ -639,81 +657,101 @@ const CAT_ICONS = {
 // ════════════════════════════════════════════════════════
 const RAW = [
   // ── Users ────────────────────────────────────────────────
-  { name: "Generate Data",                              cat: "Users",             deps: ["Collect Data", "User-Owned Data"] },
-  { name: "Seek Services & Content",                    cat: "Users",             deps: ["Shape User Behavior"] },
-  { name: "Behaviour data (clicks, scroll, watch time)",cat: "Users",             deps: ["Data collection infrastructure"] },
-  { name: "Location data",                              cat: "Users",             deps: ["Ad targeting engine", "Surveillance capacity"] },
-  { name: "Photos & content uploads",                   cat: "Users",             deps: ["AI training pipelines"] },
-  { name: "Social graph (friends, follows)",            cat: "Users",             deps: ["Psychographic profiling"] },
-  { name: "Biometric signals (face, voice)",            cat: "Users",             deps: ["Data collection infrastructure"] },
-  { name: "Demand for rights",                          cat: "Users",             deps: ["GDPR / data protection laws"] },
-  { name: "Platform dependency",                        cat: "Users",             deps: ["Network effects / lock-in", "Consent (or lack of)"] },
-  { name: "Consent (or lack of)",                       cat: "Users",             deps: [] },
-  { name: "Digital literacy",                           cat: "Users",             deps: [] },
+  { name: "Generate Data",                              cat: "Users",             deps: ["Collect Data", "User-Owned Data", "Data collection infrastructure", "Psychographic profiling", "Ad targeting engine"] },
+  { name: "Seek Services & Content",                    cat: "Users",             deps: ["Shape User Behavior", "Platform dependency", "Recommendation algorithms", "Network effects / lock-in", "Addictive design (infinite scroll, autoplay)"] },
+  { name: "Behaviour data (clicks, scroll, watch time)",cat: "Users",             deps: ["Data collection infrastructure", "Ad targeting engine", "Psychographic profiling", "Recommendation algorithms", "AI training pipelines", "Micro-targeting"] },
+  { name: "Location data",                              cat: "Users",             deps: ["Ad targeting engine", "Surveillance capacity", "Psychographic profiling", "Political ad spend", "State Surveillance", "National security agenda", "Consent-Based Sharing", "Privacy research", "Recommendation algorithms", "Right to be forgotten", "Regulatory Enforcement", "GDPR / data protection laws"] },
+  { name: "Photos & content uploads",                   cat: "Users",             deps: ["AI training pipelines", "Psychographic profiling", "Surveillance capacity", "Data collection infrastructure", "GDPR / data protection laws", "Right to be forgotten"] },
+  { name: "Social graph (friends, follows)",            cat: "Users",             deps: ["Psychographic profiling", "Political ad spend", "Network effects / lock-in", "Micro-targeting", "State Surveillance", "AI training pipelines", "Recommendation algorithms"] },
+  { name: "Biometric signals (face, voice)",            cat: "Users",             deps: ["Data collection infrastructure", "AI training pipelines", "Surveillance capacity", "Psychographic profiling", "State Surveillance", "GDPR / data protection laws", "Right to be forgotten"] },
+  { name: "Demand for rights",                          cat: "Users",             deps: ["GDPR / data protection laws", "Legislative power", "Civil advocacy", "Regulatory Enforcement", "Right to be forgotten"] },
+  { name: "Platform dependency",                        cat: "Users",             deps: ["Network effects / lock-in", "Consent (or lack of)", "Addictive design (infinite scroll, autoplay)", "Data portability rules"] },
+  { name: "Consent (or lack of)",                       cat: "Users",             deps: ["Data collection infrastructure", "Psychographic profiling", "Terms of Service", "GDPR / data protection laws", "Dark patterns"] },
+  { name: "Health & fitness data",                      cat: "Users",             deps: ["Data collection infrastructure", "Psychographic profiling", "Ad targeting engine", "AI training pipelines", "Surveillance capacity", "GDPR / data protection laws", "Right to be forgotten", "Consent (or lack of)", "Data brokers"] },
+  { name: "Search history",                             cat: "Users",             deps: ["Psychographic profiling", "Ad targeting engine", "Data collection infrastructure", "Recommendation algorithms", "Search engines", "Surveillance capacity", "Right to be forgotten", "GDPR / data protection laws"] },
+  { name: "Financial data",                             cat: "Users",             deps: ["Psychographic profiling", "Ad targeting engine", "Data brokers", "Surveillance capacity", "GDPR / data protection laws", "Right to be forgotten", "Consent (or lack of)"] },
 
   // ── Tech Platforms ───────────────────────────────────────
-  { name: "Collect Data",                               cat: "Tech Platforms",    deps: ["Shape User Behavior", "Monetize Attention", "Reach Audiences"] },
-  { name: "Shape User Behavior",                        cat: "Tech Platforms",    deps: ["Seek Services & Content", "Generate Data"] },
-  { name: "Monetize Attention",                         cat: "Tech Platforms",    deps: ["Reach Audiences"] },
-  { name: "Data collection infrastructure",             cat: "Tech Platforms",    deps: ["Psychographic profiling"] },
-  { name: "Ad targeting engine",                        cat: "Tech Platforms",    deps: ["Micro-targeting"] },
-  { name: "AI training pipelines",                      cat: "Tech Platforms",    deps: ["A/B testing at scale"] },
-  { name: "Network effects / lock-in",                  cat: "Tech Platforms",    deps: [] },
-  { name: "Terms of Service",                           cat: "Tech Platforms",    deps: ["Consent (or lack of)"] },
-  { name: "Recommendation algorithms",                  cat: "Tech Platforms",    deps: ["Behaviour data (clicks, scroll, watch time)", "Data collection infrastructure"] },
-  { name: "Profit motive",                              cat: "Tech Platforms",    deps: ["Lobbying"] },
-  { name: "Lobbying",                                   cat: "Tech Platforms",    deps: ["Underfunding", "Legislative power"] },
-  { name: "Addictive design (infinite scroll, autoplay)",cat: "Tech Platforms",   deps: ["Platform dependency"] },
+  { name: "Collect Data",                               cat: "Tech Platforms",    deps: ["Shape User Behavior", "Monetize Attention", "Reach Audiences", "Data collection infrastructure", "AI training pipelines", "Psychographic profiling"] },
+  { name: "Shape User Behavior",                        cat: "Tech Platforms",    deps: ["Seek Services & Content", "Generate Data", "Addictive design (infinite scroll, autoplay)", "Recommendation algorithms", "Profit motive"] },
+  { name: "Monetize Attention",                         cat: "Tech Platforms",    deps: ["Reach Audiences", "Ad revenue payment", "Profit motive", "Ad targeting engine"] },
+  { name: "Data collection infrastructure",             cat: "Tech Platforms",    deps: ["Psychographic profiling", "AI training pipelines", "Ad targeting engine", "Recommendation algorithms", "Surveillance capacity"] },
+  { name: "Ad targeting engine",                        cat: "Tech Platforms",    deps: ["Micro-targeting", "Ad revenue payment", "Psychographic profiling"] },
+  { name: "AI training pipelines",                      cat: "Tech Platforms",    deps: ["A/B testing at scale", "Recommendation algorithms", "Psychographic profiling", "Surveillance capacity"] },
+  { name: "Network effects / lock-in",                  cat: "Tech Platforms",    deps: ["Platform dependency", "Profit motive", "Data portability rules"] },
+  { name: "Terms of Service",                           cat: "Tech Platforms",    deps: ["Consent (or lack of)", "GDPR / data protection laws", "Regulatory Enforcement", "Dark patterns"] },
+  { name: "Recommendation algorithms",                  cat: "Tech Platforms",    deps: ["Behaviour data (clicks, scroll, watch time)", "Data collection infrastructure", "Addictive design (infinite scroll, autoplay)", "Shape User Behavior", "Psychographic profiling"] },
+  { name: "Profit motive",                              cat: "Tech Platforms",    deps: ["Lobbying", "Monetize Attention", "Addictive design (infinite scroll, autoplay)"] },
+  { name: "Lobbying",                                   cat: "Tech Platforms",    deps: ["Underfunding", "Legislative power", "GDPR / data protection laws", "Accountability gaps", "National security agenda"] },
+  { name: "Addictive design (infinite scroll, autoplay)",cat: "Tech Platforms",   deps: ["Platform dependency", "Shape User Behavior", "Behaviour data (clicks, scroll, watch time)"] },
+  { name: "Mobile apps",                                cat: "Tech Platforms",    deps: ["Data collection infrastructure", "Surveillance capacity", "Biometric signals (face, voice)", "Location data", "Network effects / lock-in", "Addictive design (infinite scroll, autoplay)", "Platform dependency", "Consent (or lack of)", "GDPR / data protection laws"] },
+  { name: "Social Networks",                            cat: "Tech Platforms",    deps: ["Network effects / lock-in", "Psychographic profiling", "Recommendation algorithms", "Addictive design (infinite scroll, autoplay)", "Political ad spend", "Micro-targeting", "Data collection infrastructure", "Mobile apps", "Surveillance capacity"] },
+  { name: "Streaming Platforms",                        cat: "Tech Platforms",    deps: ["Recommendation algorithms", "Addictive design (infinite scroll, autoplay)", "Psychographic profiling", "Behaviour data (clicks, scroll, watch time)", "Platform dependency", "Ad targeting engine", "Data collection infrastructure", "Mobile apps"] },
+  { name: "Search engines",                             cat: "Tech Platforms",    deps: ["Data collection infrastructure", "Psychographic profiling", "Ad targeting engine", "Recommendation algorithms", "Surveillance capacity", "GDPR / data protection laws", "Mobile apps"] },
+  { name: "Operating systems",                          cat: "Tech Platforms",    deps: ["Data collection infrastructure", "Mobile apps", "Surveillance capacity", "Network effects / lock-in", "Platform dependency", "Consent (or lack of)", "GDPR / data protection laws"] },
+  { name: "Data brokers",                               cat: "Tech Platforms",    deps: ["Psychographic profiling", "Ad targeting engine", "Micro-targeting", "Surveillance capacity", "Political ad spend", "Accountability gaps", "GDPR / data protection laws", "Right to be forgotten"] },
+  { name: "Cloud infrastructure (AWS, Azure, GCP)",     cat: "Tech Platforms",    deps: ["Data collection infrastructure", "AI training pipelines", "Surveillance capacity", "Consent (or lack of)", "GDPR / data protection laws", "Network effects / lock-in", "Data brokers"] },
+  { name: "Cross-site tracking (cookies, pixels)",      cat: "Tech Platforms",    deps: ["Data collection infrastructure", "Ad targeting engine", "Psychographic profiling", "Real-time bidding (RTB)", "Dark patterns", "GDPR / data protection laws", "Consent (or lack of)", "Accountability gaps"] },
 
   // ── Advertisers ──────────────────────────────────────────
-  { name: "Promote Products",                           cat: "Advertisers",       deps: ["Monetize Attention"] },
-  { name: "Reach Audiences",                            cat: "Advertisers",       deps: ["Generate Data"] },
-  { name: "Psychographic profiling",                    cat: "Advertisers",       deps: [] },
-  { name: "Micro-targeting",                            cat: "Advertisers",       deps: ["Behaviour data (clicks, scroll, watch time)"] },
-  { name: "Ad revenue payment",                         cat: "Advertisers",       deps: ["Profit motive", "Recommendation algorithms"] },
-  { name: "Political ad spend",                         cat: "Advertisers",       deps: ["Digital literacy", "Democratic accountability"] },
-  { name: "Dark patterns",                              cat: "Advertisers",       deps: ["Consent (or lack of)"] },
-  { name: "Accountability gaps",                        cat: "Advertisers",       deps: ["Auditing powers"] },
-  { name: "A/B testing at scale",                       cat: "Advertisers",       deps: [] },
+  { name: "Promote Products",                           cat: "Advertisers",       deps: ["Monetize Attention", "Reach Audiences", "Ad targeting engine"] },
+  { name: "Reach Audiences",                            cat: "Advertisers",       deps: ["Generate Data", "Ad targeting engine", "Micro-targeting"] },
+  { name: "Psychographic profiling",                    cat: "Advertisers",       deps: ["Micro-targeting", "Ad targeting engine", "Political ad spend"] },
+  { name: "Micro-targeting",                            cat: "Advertisers",       deps: ["Behaviour data (clicks, scroll, watch time)", "Psychographic profiling", "Political ad spend", "Democratic accountability"] },
+  { name: "Ad revenue payment",                         cat: "Advertisers",       deps: ["Profit motive", "Recommendation algorithms", "Monetize Attention", "Ad targeting engine"] },
+  { name: "Political ad spend",                         cat: "Advertisers",       deps: ["Democratic accountability", "Micro-targeting", "Psychographic profiling", "Legislative power"] },
+  { name: "Dark patterns",                              cat: "Advertisers",       deps: ["Consent (or lack of)", "Terms of Service", "Regulatory Enforcement"] },
+  { name: "Accountability gaps",                        cat: "Advertisers",       deps: ["Auditing powers", "Lobbying", "Democratic accountability"] },
+  { name: "A/B testing at scale",                       cat: "Advertisers",       deps: ["Shape User Behavior", "Addictive design (infinite scroll, autoplay)", "Behaviour data (clicks, scroll, watch time)"] },
+  { name: "Real-time bidding (RTB)",                    cat: "Advertisers",       deps: ["Ad targeting engine", "Psychographic profiling", "Data collection infrastructure", "Accountability gaps", "GDPR / data protection laws", "Micro-targeting", "Ad revenue payment"] },
 
   // ── Governments ──────────────────────────────────────────
-  { name: "Data Regulation",                            cat: "Governments",       deps: ["Collect Data", "Monetize Attention", "Regulatory Enforcement"] },
-  { name: "State Surveillance",                         cat: "Governments",       deps: ["Collect Data", "Generate Data"] },
-  { name: "Surveillance capacity",                      cat: "Governments",       deps: ["Data collection infrastructure", "Location data"] },
-  { name: "Democratic accountability",                  cat: "Governments",       deps: [] },
-  { name: "Legislative power",                          cat: "Governments",       deps: ["Terms of Service"] },
-  { name: "National security agenda",                   cat: "Governments",       deps: ["GDPR / data protection laws"] },
+  { name: "Data Regulation",                            cat: "Governments",       deps: ["Collect Data", "Monetize Attention", "Regulatory Enforcement", "GDPR / data protection laws", "Fines & penalties"] },
+  { name: "State Surveillance",                         cat: "Governments",       deps: ["Collect Data", "Generate Data", "Surveillance capacity", "National security agenda"] },
+  { name: "Surveillance capacity",                      cat: "Governments",       deps: ["Data collection infrastructure", "Location data", "State Surveillance", "AI training pipelines"] },
+  { name: "Democratic accountability",                  cat: "Governments",       deps: ["Civil advocacy", "Whistleblowing", "Investigative journalism", "Legislative power"] },
+  { name: "Legislative power",                          cat: "Governments",       deps: ["Terms of Service", "GDPR / data protection laws", "Data Regulation", "Fines & penalties", "Auditing powers"] },
+  { name: "National security agenda",                   cat: "Governments",       deps: ["GDPR / data protection laws", "State Surveillance", "Surveillance capacity"] },
+  { name: "Data retention laws",                        cat: "Governments",       deps: ["Surveillance capacity", "State Surveillance", "GDPR / data protection laws", "Data collection infrastructure", "National security agenda"] },
+  { name: "Biometric databases",                        cat: "Governments",       deps: ["State Surveillance", "Surveillance capacity", "Biometric signals (face, voice)", "GDPR / data protection laws", "AI training pipelines"] },
 
   // ── Regulators ───────────────────────────────────────────
-  { name: "Regulatory Enforcement",                     cat: "Regulators",        deps: ["Collect Data", "Monetize Attention"] },
-  { name: "Regulatory Fines",                           cat: "Regulators",        deps: ["Data Regulation", "Collect Data"] },
-  { name: "GDPR / data protection laws",                cat: "Regulators",        deps: ["Terms of Service"] },
-  { name: "Fines & penalties",                          cat: "Regulators",        deps: ["Profit motive"] },
-  { name: "Auditing powers",                            cat: "Regulators",        deps: ["Data collection infrastructure"] },
-  { name: "Right to be forgotten",                      cat: "Regulators",        deps: ["Consent (or lack of)"] },
-  { name: "Data portability rules",                     cat: "Regulators",        deps: ["Platform dependency", "Data ownership model"] },
-  { name: "Underfunding",                               cat: "Regulators",        deps: [] },
+  { name: "Regulatory Enforcement",                     cat: "Regulators",        deps: ["Collect Data", "Monetize Attention", "Fines & penalties", "Regulatory Fines", "GDPR / data protection laws"] },
+  { name: "Regulatory Fines",                           cat: "Regulators",        deps: ["Data Regulation", "Collect Data", "Profit motive", "Accountability gaps"] },
+  { name: "GDPR / data protection laws",                cat: "Regulators",        deps: ["Terms of Service", "Consent (or lack of)", "Right to be forgotten", "Data portability rules", "Regulatory Enforcement"] },
+  { name: "Fines & penalties",                          cat: "Regulators",        deps: ["Profit motive", "Accountability gaps", "Democratic accountability"] },
+  { name: "Auditing powers",                            cat: "Regulators",        deps: ["Data collection infrastructure", "Accountability gaps", "Regulatory Enforcement"] },
+  { name: "Right to be forgotten",                      cat: "Regulators",        deps: ["Consent (or lack of)", "Psychographic profiling", "Regulatory Enforcement", "GDPR / data protection laws"] },
+  { name: "Data portability rules",                     cat: "Regulators",        deps: ["Platform dependency", "Data ownership model", "Network effects / lock-in", "Democratic governance", "User-Owned Data"] },
+  { name: "Underfunding",                               cat: "Regulators",        deps: ["Accountability gaps", "Regulatory Enforcement"] },
+  { name: "Digital Markets Act (DMA)",                  cat: "Regulators",        deps: ["Network effects / lock-in", "Platform dependency", "Data portability rules", "Regulatory Enforcement", "Lobbying"] },
+  { name: "CCPA / CPRA",                                cat: "Regulators",        deps: ["Consent (or lack of)", "Right to be forgotten", "Data portability rules", "Regulatory Enforcement", "GDPR / data protection laws"] },
 
   // ── Civil Society ────────────────────────────────────────
-  { name: "Privacy Research",                           cat: "Civil Society",     deps: ["Data Regulation", "Regulatory Enforcement"] },
-  { name: "Civil Advocacy",                             cat: "Civil Society",     deps: ["Data Regulation", "Promote Products", "Regulatory Enforcement"] },
-  { name: "Investigative journalism",                   cat: "Civil Society",     deps: ["GDPR / data protection laws"] },
-  { name: "Legal challenges",                           cat: "Civil Society",     deps: ["Fines & penalties"] },
-  { name: "Academic research",                          cat: "Civil Society",     deps: ["Legislative power"] },
-  { name: "Whistleblowing",                             cat: "Civil Society",     deps: ["Democratic accountability"] },
-  { name: "Data literacy campaigns",                    cat: "Civil Society",     deps: ["Digital literacy"] },
-  { name: "Public advocacy",                            cat: "Civil Society",     deps: ["Auditing powers"] },
+  { name: "Privacy research",                           cat: "Civil Society",     deps: ["Data Regulation", "Regulatory Enforcement", "Civil advocacy", "Academic research"] },
+  { name: "Civil advocacy",                             cat: "Civil Society",     deps: ["Data Regulation", "Promote Products", "Regulatory Enforcement", "Legislative power", "Democratic accountability"] },
+  { name: "Investigative journalism",                   cat: "Civil Society",     deps: ["GDPR / data protection laws", "Whistleblowing", "Democratic accountability", "Accountability gaps"] },
+  { name: "Legal challenges",                           cat: "Civil Society",     deps: ["Fines & penalties", "Regulatory Enforcement", "GDPR / data protection laws", "Right to be forgotten"] },
+  { name: "Academic research",                          cat: "Civil Society",     deps: ["Legislative power", "Privacy research", "Federated learning"] },
+  { name: "Whistleblowing",                             cat: "Civil Society",     deps: ["Democratic accountability", "Investigative journalism", "Civil advocacy", "Regulatory Enforcement"] },
+  { name: "Data literacy campaigns",                    cat: "Civil Society",     deps: ["Civil advocacy", "Public advocacy"] },
+  { name: "Public advocacy",                            cat: "Civil Society",     deps: ["Auditing powers", "Democratic accountability", "Legislative power", "Demand for rights"] },
+  { name: "Fact-checking organisations",                cat: "Civil Society",     deps: ["Recommendation algorithms", "Democratic accountability", "Political ad spend", "Civil advocacy", "Investigative journalism"] },
+  { name: "Digital rights organisations",               cat: "Civil Society",     deps: ["Legislative power", "GDPR / data protection laws", "Civil advocacy", "Legal challenges", "Privacy research", "Democratic accountability"] },
 
   // ── Data Cooperatives ────────────────────────────────────
-  { name: "User-Owned Data",                            cat: "Data Cooperatives", deps: ["Privacy Research", "Civil Advocacy"] },
-  { name: "Consent-Based Sharing",                      cat: "Data Cooperatives", deps: ["Collect Data", "Privacy Research"] },
-  { name: "Value Return to Users",                      cat: "Data Cooperatives", deps: ["Seek Services & Content", "Civil Advocacy"] },
-  { name: "Consent infrastructure",                     cat: "Data Cooperatives", deps: ["Consent (or lack of)", "Ad targeting engine"] },
-  { name: "Democratic governance",                      cat: "Data Cooperatives", deps: ["Platform dependency"] },
-  { name: "Revenue distribution",                       cat: "Data Cooperatives", deps: ["Behaviour data (clicks, scroll, watch time)"] },
-  { name: "Data ownership model",                       cat: "Data Cooperatives", deps: ["Consent (or lack of)"] },
-  { name: "Federated learning",                         cat: "Data Cooperatives", deps: ["Data collection infrastructure", "Academic research"] },
-  { name: "Public good funding",                        cat: "Data Cooperatives", deps: ["Legislative power"] },
+  { name: "User-Owned Data",                            cat: "Data Cooperatives", deps: ["Privacy research", "Civil advocacy", "Data ownership model", "Consent-Based Sharing"] },
+  { name: "Consent-Based Sharing",                      cat: "Data Cooperatives", deps: ["Collect Data", "Privacy research", "Consent infrastructure", "Data ownership model"] },
+  { name: "Value Return to Users",                      cat: "Data Cooperatives", deps: ["Seek Services & Content", "Civil advocacy", "Revenue distribution", "Democratic governance"] },
+  { name: "Consent infrastructure",                     cat: "Data Cooperatives", deps: ["Consent (or lack of)", "Ad targeting engine", "GDPR / data protection laws", "Data ownership model"] },
+  { name: "Democratic governance",                      cat: "Data Cooperatives", deps: ["Platform dependency", "User-Owned Data", "Civil advocacy", "Public good funding"] },
+  { name: "Revenue distribution",                       cat: "Data Cooperatives", deps: ["Behaviour data (clicks, scroll, watch time)", "Value Return to Users", "User-Owned Data"] },
+  { name: "Data ownership model",                       cat: "Data Cooperatives", deps: ["Consent (or lack of)", "User-Owned Data", "Consent-Based Sharing", "Democratic governance"] },
+  { name: "Federated learning",                         cat: "Data Cooperatives", deps: ["Data collection infrastructure", "Academic research", "AI training pipelines", "Privacy research"] },
+  { name: "Public good funding",                        cat: "Data Cooperatives", deps: ["Legislative power", "Democratic governance", "Privacy research", "Academic research", "Data literacy campaigns"] },
+  { name: "Data trusts",                                cat: "Data Cooperatives", deps: ["Data ownership model", "Consent-Based Sharing", "User-Owned Data", "Privacy research", "Democratic governance", "GDPR / data protection laws"] },
+  { name: "Differential privacy",                       cat: "Data Cooperatives", deps: ["AI training pipelines", "Privacy research", "Data collection infrastructure", "Federated learning", "Academic research"] },
+  { name: "Platform cooperatives",                      cat: "Data Cooperatives", deps: ["Network effects / lock-in", "Democratic governance", "Value Return to Users", "Platform dependency", "Civil advocacy", "Data ownership model"] },
 ];
 
 // ════════════════════════════════════════════════════════
@@ -725,7 +763,7 @@ const CATEGORY_FLOWS = [
   { from:"Tech Platforms",    to:"Users",             label:"Influence",             color:"#e65100", dash:null,  offset: 22, curve: 38 },
   { from:"Tech Platforms",    to:"Advertisers",       label:"Targeting",             color:"#e65100", dash:null,  offset:-22, curve: 38 },
   { from:"Advertisers",       to:"Tech Platforms",    label:"Revenue",               color:"#c8920a", dash:null,  offset: 22, curve: 38 },
-  { from:"Users",             to:"Data Cooperatives", label:"Control",               color:"#2e7d32", dash:null,  offset:  0, curve:-55 },
+  { from:"Users",             to:"Data Cooperatives", label:"Control",               color:"#2e7d32", dash:null,  offset:  0, curve: -120 },
   { from:"Data Cooperatives", to:"Civil Society",     label:"Disrupts / Rebalances", color:"#2e7d32", dash:"7,4", offset:  0, curve: 55 },
   // Regulatory / oversight dotted arrows
   { from:"Governments",       to:"Users",             label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28 },
@@ -739,11 +777,448 @@ const CATEGORY_FLOWS = [
 ];
 
 // ════════════════════════════════════════════════════════
+// CONNECTION DESCRIPTIONS  (keyed "Source→Target")
+// ════════════════════════════════════════════════════════
+const LINK_DESC = {
+  "Seek Services & Content→Platform dependency":                                { type: "Lock-in",        desc: "Relying on a platform for services and content progressively deepens dependency and raises the cost of leaving" },
+  "Seek Services & Content→Recommendation algorithms":                          { type: "Data Flow",      desc: "Content consumption patterns directly train and feed recommendation systems, creating a feedback loop" },
+  "Behaviour data (clicks, scroll, watch time)→Data collection infrastructure": { type: "Data Flow",      desc: "Raw interaction signals harvested every second by platform backend" },
+  "Behaviour data (clicks, scroll, watch time)→Ad targeting engine":            { type: "Data Flow",      desc: "Behavioural signals are the primary fuel for personalised ad delivery" },
+  "Behaviour data (clicks, scroll, watch time)→Psychographic profiling":        { type: "Data Flow",      desc: "Scroll behaviour, dwell time, and click patterns reveal personality traits and emotional states" },
+  "Behaviour data (clicks, scroll, watch time)→Recommendation algorithms":      { type: "Data Flow",      desc: "Real-time engagement data continuously updates and refines recommendation models" },
+  "Location data→Ad targeting engine":                                           { type: "Data Flow",      desc: "Location sold to advertisers for geo-targeted campaigns" },
+  "Location data→Surveillance capacity":                                         { type: "Surveillance",   desc: "Cell tower & GPS data accessed by law enforcement via third-party doctrine" },
+  "Location data→Psychographic profiling":                                       { type: "Data Flow",      desc: "Where you go reveals personality, beliefs, and lifestyle — location sold directly to data brokers for profile enrichment" },
+  "Location data→Political ad spend":                                            { type: "Data Flow",      desc: "Geo-fencing around political events and polling stations enables hyper-local political ad targeting by campaigns" },
+  "Location data→Right to be forgotten":                                          { type: "Regulatory",     desc: "Location history is among the most requested data types for erasure under GDPR Article 17 — users seek deletion of location trails held by brokers and platforms" },
+  "Location data→Regulatory Enforcement":                                         { type: "Regulatory",     desc: "Selling or misusing location data without consent is a primary trigger for regulatory investigations — the FTC has acted specifically against location data brokers" },
+  "Location data→GDPR / data protection laws":                                    { type: "Regulatory",     desc: "Location is classified as sensitive personal data under GDPR, requiring stricter legal basis for collection and prohibiting sale without explicit consent" },
+  "Location data→Recommendation algorithms":                                      { type: "Data Flow",      desc: "Location context personalises feeds with nearby businesses, local events, and regionally trending content — used by platforms like Google, TikTok, and Yelp" },
+  "Location data→State Surveillance":                                            { type: "Surveillance",   desc: "Real-time location data enables state agencies to track individuals' movements and associations without a warrant" },
+  "Location data→National security agenda":                                      { type: "Surveillance",   desc: "Bulk location metadata collected under national security justifications to map social networks and detect dissent" },
+  "Location data→Consent-Based Sharing":                                         { type: "Intervention",   desc: "Location shared with explicit user consent under cooperative models gives individuals control over who accesses their whereabouts" },
+  "Location data→Privacy research":                                              { type: "Feedback",       desc: "Location traces are a primary subject of privacy research, exposing how granular movement data re-identifies anonymized datasets" },
+  "Photos & content uploads→AI training pipelines":                              { type: "Data Flow",      desc: "Uploaded images used without explicit consent to train generative AI models" },
+  "Photos & content uploads→Psychographic profiling":                           { type: "Data Flow",      desc: "Visual content reveals lifestyle, relationships, economic status, and beliefs for profile enrichment" },
+  "Photos & content uploads→Surveillance capacity":                             { type: "Surveillance",   desc: "Uploaded photos contribute to facial recognition databases used by law enforcement and state surveillance" },
+  "Social graph (friends, follows)→Psychographic profiling":                     { type: "Data Flow",      desc: "Friend networks map influence clusters sold to political and commercial advertisers" },
+  "Social graph (friends, follows)→Political ad spend":                         { type: "Data Flow",      desc: "Friend networks and follower graphs used for coordinated political micro-targeting, as demonstrated by Cambridge Analytica" },
+  "Social graph (friends, follows)→Network effects / lock-in":                  { type: "Lock-in",        desc: "The social graph is the primary mechanism of platform lock-in — losing it means losing all connections" },
+  "Social graph (friends, follows)→Micro-targeting":                            { type: "Data Flow",      desc: "Friend networks identify susceptible users and enable coordinated message delivery across social clusters" },
+  "Biometric signals (face, voice)→Data collection infrastructure":              { type: "Data Flow",      desc: "Facial expressions and voice patterns captured for emotion-based targeting" },
+  "Biometric signals (face, voice)→AI training pipelines":                      { type: "Data Flow",      desc: "Facial expressions, voice patterns, and biometric data used to train emotion recognition and voice AI models" },
+  "Biometric signals (face, voice)→Surveillance capacity":                      { type: "Surveillance",   desc: "Facial recognition and voiceprints collected at scale enable state identification and tracking of individuals" },
+  "Biometric signals (face, voice)→Psychographic profiling":                    { type: "Data Flow",      desc: "Emotional states and personality traits inferred from biometric signals enable emotion-based ad targeting" },
+  "Demand for rights→GDPR / data protection laws":                               { type: "Demand",         desc: "Public pressure translates into legislative action on data rights" },
+  "Demand for rights→Legislative power":                                        { type: "Demand",         desc: "Public demand for data rights drives direct legislative action beyond specific regulations like GDPR" },
+  "Platform dependency→Network effects / lock-in":                               { type: "Lock-in",        desc: "Network effects mean users cannot leave without losing their entire social graph" },
+  "Platform dependency→Consent (or lack of)":                                    { type: "Lock-in",        desc: "Dependency normalises consent to surveillance — users accept tracking to keep access" },
+  "Recommendation algorithms→Behaviour data (clicks, scroll, watch time)":       { type: "Influence",      desc: "Algorithms optimise content to trigger more engagement — feeding more data back" },
+  "Addictive design (infinite scroll, autoplay)→Platform dependency":            { type: "Manipulation",   desc: "Dopamine-loop design increases time-on-platform and deepens dependency" },
+  "Terms of Service→Consent (or lack of)":                                       { type: "Power",          desc: "Lengthy ToS obscures data use; users consent without meaningful understanding" },
+  "Ad targeting engine→Micro-targeting":                                         { type: "Data Flow",      desc: "Platform sells precision targeting capabilities built from user behavioural data" },
+  "Data collection infrastructure→Psychographic profiling":                      { type: "Data Flow",      desc: "Aggregated profiles sold to advertisers for personality-based persuasion" },
+  "AI training pipelines→A/B testing at scale":                                  { type: "Enabler",        desc: "AI-powered systems allow advertisers to run millions of message variants" },
+  "Ad revenue payment→Profit motive":                                            { type: "Revenue Flow",   desc: "Advertising fees are the primary income stream — incentivising more data extraction" },
+  "Ad revenue payment→Recommendation algorithms":                                { type: "Revenue Flow",   desc: "Ad revenue funds algorithm development that improves targeting — reinforces extraction model" },
+  "Micro-targeting→Behaviour data (clicks, scroll, watch time)":                 { type: "Manipulation",   desc: "Targeted ads exploit emotional state and vulnerability to change decisions" },
+  "Political ad spend→Democratic accountability":                                { type: "Power",          desc: "Large-scale political ad buys can influence elections and weaken democratic oversight" },
+  "Dark patterns→Consent (or lack of)":                                          { type: "Manipulation",   desc: "Deceptive UX pushes users into accepting data collection they'd otherwise reject" },
+  "Accountability gaps→Auditing powers":                                         { type: "Constraint",     desc: "Lack of disclosure rules limits regulators' ability to trace harmful ad spend" },
+  "Legislative power→Terms of Service":                                          { type: "Governance",     desc: "Laws like GDPR force platforms to update ToS and data practices" },
+  "Surveillance capacity→Data collection infrastructure":                        { type: "Surveillance",   desc: "Governments compel platforms to provide access to stored user data" },
+  "Surveillance capacity→Location data":                                         { type: "Surveillance",   desc: "Governments access location metadata via third-party doctrine without warrant" },
+  "National security agenda→GDPR / data protection laws":                        { type: "Tension",        desc: "Security interests often used to justify exemptions from data protection rules" },
+  "GDPR / data protection laws→Terms of Service":                                { type: "Regulation",     desc: "GDPR mandates plain-language ToS and explicit consent mechanisms" },
+  "Fines & penalties→Profit motive":                                             { type: "Regulation",     desc: "Financial penalties (up to 4% global revenue) create compliance incentives" },
+  "Auditing powers→Data collection infrastructure":                              { type: "Regulation",     desc: "Regulatory inspections examine what data is collected and how it's used" },
+  "Right to be forgotten→Consent (or lack of)":                                  { type: "Right",          desc: "Users can request removal of personal data from search results and platforms" },
+  "Data portability rules→Platform dependency":                                  { type: "Right",          desc: "Portability rules reduce lock-in by letting users export their data" },
+  "Data portability rules→Data ownership model":                                 { type: "Enabler",        desc: "Portability mandates make it possible for cooperatives to onboard users" },
+  "Lobbying→Underfunding":                                                       { type: "Power",          desc: "Platform lobbying limits regulatory budgets and weakens enforcement capacity" },
+  "Lobbying→Legislative power":                                                  { type: "Power",          desc: "Platforms shape the very laws designed to constrain them" },
+  "Investigative journalism→GDPR / data protection laws":                        { type: "Accountability", desc: "Exposés (Cambridge Analytica, PRISM) generate political pressure for stronger laws" },
+  "Legal challenges→Fines & penalties":                                          { type: "Accountability", desc: "NGO class-action GDPR complaints trigger regulatory investigations and fines" },
+  "Academic research→Legislative power":                                         { type: "Knowledge",      desc: "Research by Zuboff, Lanier etc. provides evidence base for legislative action" },
+  "Whistleblowing→Democratic accountability":                                    { type: "Accountability", desc: "Insider disclosures (Snowden, Cambridge Analytica) expose systemic abuses" },
+  "Public advocacy→Auditing powers":                                             { type: "Demand",         desc: "Civil society demands more rigorous platform auditing and enforcement" },
+  "Consent infrastructure→Consent (or lack of)":                                 { type: "Intervention",   desc: "Replaces passive ToS with granular, revocable, meaningful consent mechanisms" },
+  "Consent infrastructure→Ad targeting engine":                                  { type: "Intervention",   desc: "Consent-based data is more valuable and legally safer — disrupts surveillance model" },
+  "Democratic governance→Platform dependency":                                   { type: "Intervention",   desc: "User ownership and voting rights reduce dependency on commercial platforms" },
+  "Revenue distribution→Behaviour data (clicks, scroll, watch time)":            { type: "Intervention",   desc: "Users receive financial return on the value their data generates" },
+  "Data ownership model→Consent (or lack of)":                                   { type: "Right",          desc: "Shifts data from company property to individual asset held in trust" },
+  "Federated learning→Data collection infrastructure":                           { type: "Intervention",   desc: "Privacy-preserving alternative: insights extracted without raw data leaving user devices" },
+  "Federated learning→Academic research":                                        { type: "Enabler",        desc: "Privacy-safe data access enables researchers to study system harms without exposing users" },
+  "Public good funding→Legislative power":                                       { type: "Enabler",        desc: "Demonstrates that ethical data sharing for public benefit is viable — strengthens case for regulation" },
+  "Recommendation algorithms→Data collection infrastructure":                    { type: "Influence",      desc: "More engagement generates more data which trains better algorithms — self-reinforcing loop" },
+  "Profit motive→Lobbying":                                                      { type: "Driver",         desc: "Revenue funds lobbying that weakens regulation enabling more data extraction" },
+  "Consent (or lack of)→Data collection infrastructure":                        { type: "Enabler",        desc: "Absence of meaningful consent is what enables unconstrained data collection at scale" },
+  "Consent (or lack of)→Psychographic profiling":                               { type: "Enabler",        desc: "Without meaningful consent, behavioural and personal data flows freely into profiling systems" },
+
+  // ── Users (new) ──────────────────────────────────────────────────────────────
+  "Generate Data→Data collection infrastructure":                               { type: "Data Flow",      desc: "Every interaction users have online flows into platform collection infrastructure where it is stored and processed" },
+  "Generate Data→Psychographic profiling":                                      { type: "Data Flow",      desc: "Each data point generated contributes to the psychographic profile platforms build around the user" },
+  "Generate Data→Ad targeting engine":                                          { type: "Data Flow",      desc: "User-generated data is the raw material that powers the ad targeting engine" },
+  "Seek Services & Content→Network effects / lock-in":                          { type: "Lock-in",        desc: "Every time a user seeks services on a platform the network effect strengthens and switching costs rise" },
+  "Seek Services & Content→Addictive design (infinite scroll, autoplay)":       { type: "Feedback",       desc: "User seeking behavior is the target that addictive design is optimized around — platforms engineer features to capture and extend it" },
+  "Behaviour data (clicks, scroll, watch time)→AI training pipelines":          { type: "Data Flow",      desc: "Billions of interaction signals train the next generation of AI recommendation and targeting models" },
+  "Behaviour data (clicks, scroll, watch time)→Micro-targeting":                { type: "Data Flow",      desc: "Granular behavioral data enables precise micro-targeting of individuals based on real-time emotional states and vulnerabilities" },
+  "Photos & content uploads→Data collection infrastructure":                    { type: "Data Flow",      desc: "Uploaded media flows directly into platform storage and processing infrastructure" },
+  "Photos & content uploads→GDPR / data protection laws":                       { type: "Regulatory",     desc: "Photos are personal data under GDPR — their collection and use requires a lawful basis and is subject to erasure rights" },
+  "Photos & content uploads→Right to be forgotten":                             { type: "Right",          desc: "Users can request deletion of uploaded photos from platforms and search indexes under GDPR Article 17" },
+  "Social graph (friends, follows)→State Surveillance":                         { type: "Surveillance",   desc: "Social graphs reveal political associations, family ties, and activist networks — a primary target for state surveillance programs" },
+  "Social graph (friends, follows)→AI training pipelines":                      { type: "Data Flow",      desc: "Relationship graphs and interaction patterns train AI models for content ranking, fraud detection, and influence mapping" },
+  "Social graph (friends, follows)→Recommendation algorithms":                  { type: "Data Flow",      desc: "Who you follow and who interacts with you is a primary signal for content recommendation systems" },
+  "Biometric signals (face, voice)→State Surveillance":                         { type: "Surveillance",   desc: "Facial recognition and voiceprints enable real-time identification and tracking of individuals in public and private spaces" },
+  "Biometric signals (face, voice)→GDPR / data protection laws":                { type: "Regulatory",     desc: "Biometric data is a special category under GDPR Article 9 — its processing requires explicit consent or another strict legal basis" },
+  "Biometric signals (face, voice)→Right to be forgotten":                      { type: "Right",          desc: "Users have the right to request deletion of biometric profiles held by platforms or data brokers" },
+  "Demand for rights→Civil advocacy":                                           { type: "Demand",         desc: "Public demand for data rights is channeled through civil society organizations that translate it into policy campaigns" },
+  "Demand for rights→Regulatory Enforcement":                                   { type: "Demand",         desc: "Rights demands trigger formal complaints to regulators, prompting enforcement investigations" },
+  "Demand for rights→Right to be forgotten":                                    { type: "Demand",         desc: "The right to erasure is one of the most exercised data rights demanded by users under GDPR" },
+  "Platform dependency→Addictive design (infinite scroll, autoplay)":           { type: "Feedback",       desc: "Platform dependency justifies continued investment in addictive design features to maintain and deepen engagement" },
+  "Platform dependency→Data portability rules":                                 { type: "Demand",         desc: "High platform dependency is the direct motivation for portability regulations — trapped users are what portability rules address" },
+  "Consent (or lack of)→Terms of Service":                                      { type: "Mechanism",      desc: "Terms of Service is the primary mechanism through which consent — or its manufactured substitute — is operationalized" },
+  "Consent (or lack of)→GDPR / data protection laws":                           { type: "Regulatory",     desc: "GDPR was designed specifically to address the inadequacy of pre-regulation consent practices — consent is its central concept" },
+  "Consent (or lack of)→Dark patterns":                                         { type: "Enabler",        desc: "The absence of genuine consent creates the space for dark patterns — platforms exploit consent gaps through deceptive UX" },
+
+  // ── Tech Platforms (new) ─────────────────────────────────────────────────────
+  "Collect Data→Data collection infrastructure":                                { type: "Data Flow",      desc: "Data collection is the purpose of the infrastructure — the two are directly coupled" },
+  "Collect Data→AI training pipelines":                                         { type: "Data Flow",      desc: "Collected data is the primary fuel for AI training — more collection means more capable models" },
+  "Collect Data→Psychographic profiling":                                       { type: "Data Flow",      desc: "Data collected across sessions is aggregated to build detailed psychographic profiles of users" },
+  "Shape User Behavior→Addictive design (infinite scroll, autoplay)":           { type: "Mechanism",      desc: "Shaping behavior at scale requires addictive design mechanisms to sustain attention and drive user actions" },
+  "Shape User Behavior→Recommendation algorithms":                              { type: "Mechanism",      desc: "Recommendation algorithms are the primary tool for shaping what users see and do at scale" },
+  "Shape User Behavior→Profit motive":                                          { type: "Revenue Flow",   desc: "Shaped user behavior — more engagement, more purchases, more data — is what generates platform profit" },
+  "Monetize Attention→Ad revenue payment":                                      { type: "Revenue Flow",   desc: "Selling user attention to advertisers is what generates ad revenue payments to platforms" },
+  "Monetize Attention→Profit motive":                                           { type: "Revenue Flow",   desc: "Attention monetization is the core driver of platform profit — it incentivises extracting and holding maximum user attention" },
+  "Monetize Attention→Ad targeting engine":                                     { type: "Mechanism",      desc: "The targeting engine is what makes attention monetization precise and valuable — untargeted attention is worth far less" },
+  "Data collection infrastructure→AI training pipelines":                       { type: "Data Flow",      desc: "The infrastructure that collects and stores behavioral data is the foundation on which AI training pipelines operate" },
+  "Data collection infrastructure→Ad targeting engine":                         { type: "Data Flow",      desc: "Ad targeting engines are built on top of the data collection infrastructure — they ingest and process the collected signals" },
+  "Data collection infrastructure→Recommendation algorithms":                   { type: "Data Flow",      desc: "Recommendation algorithms require the continuous data streams provided by collection infrastructure to function in real time" },
+  "Data collection infrastructure→Surveillance capacity":                       { type: "Surveillance",   desc: "The same infrastructure that collects commercial data can be compelled to provide access to state surveillance agencies" },
+  "Ad targeting engine→Ad revenue payment":                                     { type: "Revenue Flow",   desc: "The precision of the targeting engine directly determines the value of ad placements and therefore platform ad revenue" },
+  "Ad targeting engine→Psychographic profiling":                                { type: "Data Flow",      desc: "Ad targeting systems continuously enrich psychographic profiles with data on which messages each user responds to" },
+  "AI training pipelines→Recommendation algorithms":                            { type: "Enabler",        desc: "Recommendation algorithms are the primary product of AI training — pipeline outputs directly power content feeds" },
+  "AI training pipelines→Psychographic profiling":                              { type: "Data Flow",      desc: "AI models extract personality traits and behavioral patterns from raw data to generate psychographic profiles at scale" },
+  "AI training pipelines→Surveillance capacity":                                { type: "Enabler",        desc: "AI-powered facial recognition, voice analysis, and anomaly detection dramatically extend state surveillance capacity" },
+  "Network effects / lock-in→Platform dependency":                              { type: "Lock-in",        desc: "Network effects are the mechanism that creates platform dependency — leaving means losing access to your entire social network" },
+  "Network effects / lock-in→Profit motive":                                    { type: "Driver",         desc: "Network lock-in protects platform profit by eliminating effective competition — users cannot leave, advertisers must buy" },
+  "Network effects / lock-in→Data portability rules":                           { type: "Tension",        desc: "Network effects lock-in is what portability rules are designed to break — enabling users to take their data elsewhere" },
+  "Terms of Service→GDPR / data protection laws":                               { type: "Regulatory",     desc: "Historical ToS abuses — burying consent in dense legalese — were a primary driver for GDPR's plain-language consent requirements" },
+  "Terms of Service→Regulatory Enforcement":                                    { type: "Regulatory",     desc: "ToS violations that misrepresent data use practices are a key basis for regulatory enforcement actions" },
+  "Terms of Service→Dark patterns":                                             { type: "Mechanism",      desc: "ToS documents routinely use dark patterns — confusing language, buried opt-outs — to manufacture consent" },
+  "Recommendation algorithms→Addictive design (infinite scroll, autoplay)":     { type: "Mechanism",      desc: "Recommendation feeds are the engine of infinite scroll and autoplay — they supply the content that makes addictive design work" },
+  "Recommendation algorithms→Shape User Behavior":                              { type: "Influence",      desc: "Recommendation systems actively shape user behavior by controlling which information, products, and narratives people are exposed to" },
+  "Recommendation algorithms→Psychographic profiling":                          { type: "Data Flow",      desc: "Recommendation systems generate rich psychographic signals by tracking which content types each user responds to" },
+  "Profit motive→Monetize Attention":                                           { type: "Driver",         desc: "The profit motive drives platforms to monetize every unit of user attention through advertising" },
+  "Profit motive→Addictive design (infinite scroll, autoplay)":                 { type: "Driver",         desc: "Addictive design is a direct product of the profit motive — more time on platform means more data and more ad revenue" },
+  "Lobbying→GDPR / data protection laws":                                       { type: "Power",          desc: "Tech lobby groups have systematically worked to weaken GDPR provisions, delay enforcement, and create national loopholes" },
+  "Lobbying→Accountability gaps":                                               { type: "Power",          desc: "Lobbying successfully blocks disclosure requirements and creates accountability gaps that protect platforms from scrutiny" },
+  "Lobbying→National security agenda":                                          { type: "Power",          desc: "Platforms invoke national security arguments in lobbying campaigns to resist data access and regulation requirements" },
+  "Addictive design (infinite scroll, autoplay)→Shape User Behavior":           { type: "Mechanism",      desc: "Infinite scroll, autoplay, and notification systems are the primary mechanisms through which platforms shape user behavior at scale" },
+  "Addictive design (infinite scroll, autoplay)→Behaviour data (clicks, scroll, watch time)": { type: "Data Flow", desc: "Addictive design generates enormous volumes of behavioral data — every scroll, pause, and autoplay completion is tracked" },
+
+  // ── Advertisers (new) ────────────────────────────────────────────────────────
+  "Promote Products→Reach Audiences":                                           { type: "Data Flow",      desc: "Product promotion requires reaching target audiences — the two are directly coupled in advertising campaigns" },
+  "Promote Products→Ad targeting engine":                                       { type: "Mechanism",      desc: "Modern product promotion relies on the ad targeting engine to place the right message in front of the right person" },
+  "Reach Audiences→Ad targeting engine":                                        { type: "Mechanism",      desc: "Reaching specific audiences at scale requires the precision of the ad targeting engine" },
+  "Reach Audiences→Micro-targeting":                                            { type: "Mechanism",      desc: "Audience reach is now achieved through micro-targeting rather than broad demographic buys" },
+  "Psychographic profiling→Micro-targeting":                                    { type: "Enabler",        desc: "Psychographic profiles are the input that enables micro-targeting — personality and belief data allows precise message tailoring" },
+  "Psychographic profiling→Ad targeting engine":                                { type: "Data Flow",      desc: "Psychographic profiles are fed into the ad targeting engine to match ads to users' inferred psychological states" },
+  "Psychographic profiling→Political ad spend":                                 { type: "Enabler",        desc: "Political campaigns use psychographic profiles to identify persuadable voters and tailor messaging to their psychological vulnerabilities" },
+  "Micro-targeting→Psychographic profiling":                                    { type: "Feedback",       desc: "Micro-targeting responses generate new psychographic signals — which messages worked reveals deeper personality data" },
+  "Micro-targeting→Political ad spend":                                         { type: "Enabler",        desc: "Micro-targeting is the delivery mechanism for political advertising — enabling surgically precise voter influence campaigns" },
+  "Micro-targeting→Democratic accountability":                                  { type: "Tension",        desc: "Micro-targeted political ads are invisible to the public and press, undermining the transparency needed for democratic accountability" },
+  "Ad revenue payment→Monetize Attention":                                      { type: "Revenue Flow",   desc: "Ad revenue payment is the financial realization of attention monetization — the money that flows when platforms sell user attention" },
+  "Ad revenue payment→Ad targeting engine":                                     { type: "Revenue Flow",   desc: "Ad revenue funds the development and operation of the targeting engine — more revenue means more investment in targeting precision" },
+  "Political ad spend→Micro-targeting":                                         { type: "Revenue Flow",   desc: "Political ad budgets fund the development of ever-more-precise micro-targeting capabilities used to influence voter behavior" },
+  "Political ad spend→Psychographic profiling":                                 { type: "Data Flow",      desc: "Political campaigns invest heavily in psychographic data to understand and exploit voter psychology" },
+  "Political ad spend→Legislative power":                                       { type: "Influence",      desc: "Political advertising directly influences election outcomes, shaping who holds legislative power and what policies they pursue" },
+  "Dark patterns→Terms of Service":                                             { type: "Mechanism",      desc: "Dark patterns are embedded throughout ToS and cookie consent flows to manufacture agreement without genuine understanding" },
+  "Dark patterns→Regulatory Enforcement":                                       { type: "Regulatory",     desc: "Dark pattern practices in consent flows are a growing area of regulatory enforcement under GDPR and consumer protection law" },
+  "Accountability gaps→Lobbying":                                               { type: "Feedback",       desc: "Accountability gaps created by lobbying become self-reinforcing — opacity makes it harder to challenge harmful practices" },
+  "Accountability gaps→Democratic accountability":                              { type: "Tension",        desc: "Gaps in platform accountability directly undermine democratic accountability — when platforms are opaque, democratic oversight fails" },
+  "A/B testing at scale→Shape User Behavior":                                   { type: "Mechanism",      desc: "A/B testing is how platforms scientifically optimize for behavioral outcomes — every design decision is tested against user behavior" },
+  "A/B testing at scale→Addictive design (infinite scroll, autoplay)":          { type: "Mechanism",      desc: "A/B testing is the tool used to refine and perfect addictive design features — they were optimized through mass behavioral experimentation" },
+  "A/B testing at scale→Behaviour data (clicks, scroll, watch time)":           { type: "Data Flow",      desc: "A/B testing both uses and generates vast amounts of behavioral data, creating a feedback loop of continuous optimization" },
+
+  // ── Governments (new) ────────────────────────────────────────────────────────
+  "Data Regulation→GDPR / data protection laws":                                { type: "Governance",     desc: "Data regulation frameworks like GDPR are the legislative output of government data regulation efforts" },
+  "Data Regulation→Fines & penalties":                                          { type: "Governance",     desc: "Data regulation establishes the penalty framework that enables fines for violations" },
+  "State Surveillance→Surveillance capacity":                                   { type: "Driver",         desc: "State surveillance programs drive investment in and expansion of surveillance infrastructure and capacity" },
+  "State Surveillance→National security agenda":                                { type: "Justification",  desc: "State surveillance programs are defined by and feed into the national security agenda" },
+  "Surveillance capacity→State Surveillance":                                   { type: "Feedback",       desc: "Expanded surveillance capacity enables broader surveillance programs — more capability creates more surveillance" },
+  "Surveillance capacity→AI training pipelines":                                { type: "Data Flow",      desc: "State surveillance programs feed massive datasets of faces, voices, and behaviors into AI training pipelines" },
+  "Democratic accountability→Civil advocacy":                                   { type: "Enabler",        desc: "Democratic accountability requires and empowers civil advocacy to function — civil society is its operational arm" },
+  "Democratic accountability→Whistleblowing":                                   { type: "Enabler",        desc: "Whistleblowing is a mechanism for democratic accountability — it exposes abuses that democratic institutions should check" },
+  "Democratic accountability→Investigative journalism":                         { type: "Enabler",        desc: "Investigative journalism is a primary mechanism through which democratic accountability is exercised over powerful institutions" },
+  "Democratic accountability→Legislative power":                                { type: "Governance",     desc: "Democratic accountability is the mandate that legislative power ultimately derives from and is answerable to" },
+  "Legislative power→GDPR / data protection laws":                              { type: "Governance",     desc: "Legislative power is what creates GDPR and data protection law — laws only exist because legislation enacted them" },
+  "Legislative power→Data Regulation":                                          { type: "Governance",     desc: "Legislative power is the source of all data regulation — regulations can only be created through legislative action" },
+  "Legislative power→Fines & penalties":                                        { type: "Governance",     desc: "Legislative power sets the penalty frameworks that determine how large fines can be and what violations trigger them" },
+  "Legislative power→Auditing powers":                                          { type: "Governance",     desc: "Legislative power grants regulatory agencies their auditing powers — these powers only exist because legislation created them" },
+  "National security agenda→State Surveillance":                                { type: "Justification",  desc: "The national security agenda is the primary political justification for expanding state surveillance programs" },
+  "National security agenda→Surveillance capacity":                             { type: "Driver",         desc: "National security requirements drive government investment in surveillance infrastructure and AI capabilities" },
+
+  // ── Regulators (new) ─────────────────────────────────────────────────────────
+  "Regulatory Enforcement→Fines & penalties":                                   { type: "Mechanism",      desc: "Regulatory enforcement is the process that leads to the imposition of fines and penalties on violating entities" },
+  "Regulatory Enforcement→Regulatory Fines":                                    { type: "Mechanism",      desc: "Enforcement investigations result in regulatory fines being issued against platforms found in violation" },
+  "Regulatory Enforcement→GDPR / data protection laws":                         { type: "Mechanism",      desc: "Enforcement actions operationalize GDPR — they turn abstract legal requirements into concrete compliance obligations" },
+  "Regulatory Fines→Profit motive":                                             { type: "Regulation",     desc: "Regulatory fines create financial risk that challenges the profit motive — though current fine levels are often insufficient to deter" },
+  "Regulatory Fines→Accountability gaps":                                       { type: "Regulation",     desc: "Regulatory fines address accountability gaps by imposing consequences for practices that previously went unchecked" },
+  "GDPR / data protection laws→Consent (or lack of)":                           { type: "Regulation",     desc: "GDPR defines the legal standard for valid consent and makes non-compliant consent practices unlawful" },
+  "GDPR / data protection laws→Right to be forgotten":                          { type: "Regulation",     desc: "The right to erasure is codified in GDPR Article 17 — the law creates and enforces this right for all EU data subjects" },
+  "GDPR / data protection laws→Data portability rules":                         { type: "Regulation",     desc: "GDPR Article 20 establishes the right to data portability — the law creates portability obligations for platforms" },
+  "GDPR / data protection laws→Regulatory Enforcement":                         { type: "Regulation",     desc: "GDPR is the primary legal basis for regulatory enforcement actions against platforms in the EU" },
+  "Fines & penalties→Accountability gaps":                                      { type: "Regulation",     desc: "Fines and penalties are the main tool for addressing accountability gaps — they impose costs on platforms that previously faced none" },
+  "Fines & penalties→Democratic accountability":                                { type: "Regulation",     desc: "Fines and penalties demonstrate that powerful platforms are accountable to democratic institutions, not above the law" },
+  "Auditing powers→Accountability gaps":                                        { type: "Regulation",     desc: "Auditing powers are the primary mechanism for exposing and closing accountability gaps in platform behavior" },
+  "Auditing powers→Regulatory Enforcement":                                     { type: "Mechanism",      desc: "Auditing findings provide the evidence base for regulatory enforcement actions" },
+  "Right to be forgotten→Psychographic profiling":                              { type: "Right",          desc: "Right to erasure requires platforms to delete psychographic profiles built from personal data upon valid user request" },
+  "Right to be forgotten→Regulatory Enforcement":                               { type: "Mechanism",      desc: "Failure to honor erasure requests is a violation that triggers regulatory enforcement under GDPR" },
+  "Right to be forgotten→GDPR / data protection laws":                          { type: "Right",          desc: "The right to be forgotten is exercised through GDPR — the regulation is the legal mechanism that makes erasure enforceable" },
+  "Data portability rules→Network effects / lock-in":                           { type: "Intervention",   desc: "Portability rules directly challenge network effects lock-in by enabling users to take their data to competing platforms" },
+  "Data portability rules→Democratic governance":                               { type: "Enabler",        desc: "Data portability enables users to move their data into cooperatively governed platforms, supporting democratic governance models" },
+  "Data portability rules→User-Owned Data":                                     { type: "Enabler",        desc: "Portability rules are a prerequisite for user-owned data models — you can't own your data if you can't access and move it" },
+  "Underfunding→Accountability gaps":                                           { type: "Constraint",     desc: "Underfunded regulators lack the staff, tools, and expertise to audit platforms effectively, creating systematic accountability gaps" },
+  "Underfunding→Regulatory Enforcement":                                        { type: "Constraint",     desc: "Underfunding directly weakens regulatory enforcement — fewer investigations, longer timelines, and lower fines result" },
+
+  // ── Civil Society (new) ──────────────────────────────────────────────────────
+  "Privacy research→Civil advocacy":                                            { type: "Knowledge",      desc: "Privacy research findings are the evidence base that civil advocacy organizations use to argue for stronger protections" },
+  "Privacy research→Academic research":                                         { type: "Knowledge",      desc: "Privacy research is a form of academic research and feeds into the broader peer-reviewed literature on data rights and harms" },
+  "Civil advocacy→Legislative power":                                           { type: "Demand",         desc: "Civil advocacy organizations lobby legislators, testify in hearings, and build public pressure that shapes legislative action" },
+  "Civil advocacy→Democratic accountability":                                   { type: "Accountability", desc: "Civil advocacy holds platforms and governments accountable through public campaigns, legal challenges, and media pressure" },
+  "Investigative journalism→Whistleblowing":                                    { type: "Accountability", desc: "Whistleblowers are a primary source for investigative journalists — disclosures enable reporting that reveals systemic abuses" },
+  "Investigative journalism→Democratic accountability":                         { type: "Accountability", desc: "Investigative journalism is a core mechanism of democratic accountability — exposing abuses enables public and institutional response" },
+  "Investigative journalism→Accountability gaps":                               { type: "Accountability", desc: "Investigative journalism exposes accountability gaps that regulators and legislators have missed or ignored" },
+  "Legal challenges→Regulatory Enforcement":                                    { type: "Accountability", desc: "Legal challenges by civil society organizations trigger or strengthen regulatory enforcement, turning court orders into compliance" },
+  "Legal challenges→GDPR / data protection laws":                               { type: "Accountability", desc: "Legal challenges test and clarify the scope of GDPR and data protection law, expanding their reach through case law" },
+  "Legal challenges→Right to be forgotten":                                     { type: "Accountability", desc: "Legal challenges have established and expanded the right to be forgotten through landmark court decisions" },
+  "Academic research→Privacy research":                                         { type: "Knowledge",      desc: "Academic research is the foundation of privacy research — peer-reviewed studies generate the knowledge base for data rights advocacy" },
+  "Academic research→Federated learning":                                       { type: "Knowledge",      desc: "Academic research developed federated learning as a privacy-preserving alternative to centralized data collection" },
+  "Whistleblowing→Investigative journalism":                                    { type: "Accountability", desc: "Whistleblowers provide investigative journalists with insider evidence of abuses that would otherwise be invisible to the public" },
+  "Whistleblowing→Civil advocacy":                                              { type: "Accountability", desc: "Whistleblower disclosures give civil advocacy organizations concrete evidence and public attention to build campaigns around" },
+  "Whistleblowing→Regulatory Enforcement":                                      { type: "Accountability", desc: "Whistleblower evidence can directly trigger regulatory investigations and enforcement actions against platforms" },
+  "Data literacy campaigns→Civil advocacy":                                     { type: "Enabler",        desc: "Data literacy campaigns are a form of civil advocacy — they build public awareness that creates pressure for policy change" },
+  "Data literacy campaigns→Public advocacy":                                    { type: "Enabler",        desc: "Data literacy campaigns form the grassroots base of public advocacy efforts for privacy rights" },
+  "Public advocacy→Democratic accountability":                                  { type: "Accountability", desc: "Public advocacy exercises democratic accountability by holding platforms and governments responsible to citizens" },
+  "Public advocacy→Legislative power":                                          { type: "Demand",         desc: "Public advocacy creates the political pressure that moves legislators to act on data rights and platform accountability" },
+  "Public advocacy→Demand for rights":                                          { type: "Demand",         desc: "Public advocacy campaigns build and amplify the demand for data rights among the general population" },
+
+  // ── Data Cooperatives (new) ──────────────────────────────────────────────────
+  "User-Owned Data→Data ownership model":                                       { type: "Enabler",        desc: "User-owned data is the practical implementation of the data ownership model — the concept is realized when users actually hold their data" },
+  "User-Owned Data→Consent-Based Sharing":                                      { type: "Enabler",        desc: "User-owned data enables consent-based sharing — you can only share data on your own terms if you own it" },
+  "Consent-Based Sharing→Consent infrastructure":                               { type: "Mechanism",      desc: "Consent-based sharing requires robust consent infrastructure to manage permissions, revocations, and data flows" },
+  "Consent-Based Sharing→Data ownership model":                                 { type: "Expression",     desc: "Consent-based sharing is the operational expression of the data ownership model — it's how ownership is exercised in practice" },
+  "Value Return to Users→Revenue distribution":                                 { type: "Mechanism",      desc: "Value return to users is implemented through revenue distribution mechanisms that pay users for their data contributions" },
+  "Value Return to Users→Democratic governance":                                { type: "Governance",     desc: "Value return is governed by democratic governance structures that determine how value is allocated among cooperative members" },
+  "Consent infrastructure→GDPR / data protection laws":                         { type: "Compliance",     desc: "Consent infrastructure is designed to meet and exceed GDPR consent requirements — it operationalizes the law's intent" },
+  "Consent infrastructure→Data ownership model":                                { type: "Mechanism",      desc: "Consent infrastructure is the technical implementation of the data ownership model — it enforces ownership rights at the system level" },
+  "Democratic governance→User-Owned Data":                                      { type: "Governance",     desc: "Democratic governance over data cooperatives is what ensures user-owned data remains under member control" },
+  "Democratic governance→Civil advocacy":                                       { type: "Enabler",        desc: "Democratically governed cooperatives are active civil advocates for data rights and alternative governance models" },
+  "Democratic governance→Public good funding":                                  { type: "Governance",     desc: "Democratic governance structures can direct cooperative surpluses toward public good funding and research" },
+  "Revenue distribution→Value Return to Users":                                 { type: "Mechanism",      desc: "Revenue distribution is the mechanism through which value is returned to users who generated the underlying data" },
+  "Revenue distribution→User-Owned Data":                                       { type: "Feedback",       desc: "Revenue distribution reinforces user ownership by creating a tangible financial stake in the cooperative" },
+  "Data ownership model→User-Owned Data":                                       { type: "Enabler",        desc: "The data ownership model defines the legal and technical framework within which user-owned data operates" },
+  "Data ownership model→Consent-Based Sharing":                                 { type: "Enabler",        desc: "The ownership model determines how and when data can be shared — consent is the required mechanism under ownership frameworks" },
+  "Data ownership model→Democratic governance":                                 { type: "Governance",     desc: "Data ownership models require democratic governance to prevent concentration of control within the cooperative" },
+  "Federated learning→AI training pipelines":                                   { type: "Intervention",   desc: "Federated learning is a privacy-preserving alternative to centralized AI training pipelines — insights extracted without raw data leaving devices" },
+  "Federated learning→Privacy research":                                        { type: "Knowledge",      desc: "Federated learning is an active area of privacy research — its development is driven by and contributes to the privacy research field" },
+  "Public good funding→Democratic governance":                                  { type: "Enabler",        desc: "Public good funding provides the financial independence that enables democratic governance structures to operate without commercial pressure" },
+  "Public good funding→Privacy research":                                       { type: "Enabler",        desc: "Public funding enables privacy research that would otherwise be dependent on commercial or government interests" },
+  "Public good funding→Academic research":                                      { type: "Enabler",        desc: "Public good funding supports independent academic research into platform harms and privacy-preserving alternatives" },
+  "Public good funding→Data literacy campaigns":                                { type: "Enabler",        desc: "Public good funding supports data literacy campaigns that help citizens understand their rights and the systems affecting them" },
+
+  // ── Mobile apps ──────────────────────────────────────────────────────────────
+  "Mobile apps→Data collection infrastructure":                                 { type: "Data Flow",      desc: "Apps are the primary data collection surface — they feed continuous behavioral, sensor, and interaction signals into platform infrastructure" },
+  "Mobile apps→Surveillance capacity":                                          { type: "Surveillance",   desc: "App sensor access — microphone, camera, GPS, contacts — gives platforms and states surveillance capabilities far beyond what browsers allow" },
+  "Mobile apps→Biometric signals (face, voice)":                                { type: "Data Flow",      desc: "Apps capture facial and voice biometrics through camera and microphone access, often without users realising the data is retained" },
+  "Mobile apps→Location data":                                                  { type: "Data Flow",      desc: "Apps collect precise, persistent GPS location data — including background tracking — creating detailed movement profiles unavailable to web platforms" },
+  "Mobile apps→Network effects / lock-in":                                      { type: "Lock-in",        desc: "App ecosystems deepen lock-in: OS-level integration, notification access, and habit formation make switching much harder than on the web" },
+  "Mobile apps→Addictive design (infinite scroll, autoplay)":                   { type: "Mechanism",      desc: "Mobile apps are the primary delivery mechanism for addictive design — push notifications, home screen presence, and haptic feedback amplify engagement loops" },
+  "Mobile apps→Platform dependency":                                            { type: "Lock-in",        desc: "Daily app usage builds deep habitual dependency — contacts, history, preferences, and social graphs are trapped inside individual apps" },
+  "Mobile apps→Consent (or lack of)":                                           { type: "Mechanism",      desc: "App permission dialogs are a primary site of manufactured consent — users tap 'Allow' to access features without understanding the data implications" },
+  "Mobile apps→GDPR / data protection laws":                                    { type: "Regulatory",     desc: "App data practices — including background location, third-party SDKs, and fingerprinting — are a major focus of GDPR and App Tracking Transparency enforcement" },
+
+  // ── Social Networks ──────────────────────────────────────────────────────────
+  "Social Networks→Network effects / lock-in":                                  { type: "Lock-in",        desc: "Social networks are the canonical example of network effects — a platform with your friends is irreplaceable, making switching nearly impossible" },
+  "Social Networks→Psychographic profiling":                                    { type: "Data Flow",      desc: "Likes, shares, comments, and reactions are the richest source of psychographic signals — social networks invented the modern profiling industry" },
+  "Social Networks→Recommendation algorithms":                                  { type: "Mechanism",      desc: "Algorithmic feeds on social networks determine what billions of people see — optimised for engagement, not accuracy or wellbeing" },
+  "Social Networks→Addictive design (infinite scroll, autoplay)":               { type: "Mechanism",      desc: "Social networks pioneered infinite scroll, variable-reward notifications, and like counters — the design patterns that define the attention economy" },
+  "Social Networks→Political ad spend":                                         { type: "Enabler",        desc: "Social networks are the primary channel for political micro-targeting — Facebook, X, and YouTube have transformed how political campaigns reach voters" },
+  "Social Networks→Micro-targeting":                                            { type: "Enabler",        desc: "The social graph combined with behavioral data makes social networks the most precise micro-targeting surfaces ever built" },
+  "Social Networks→Data collection infrastructure":                             { type: "Data Flow",      desc: "Every interaction on a social network — post, view, hover, reaction — flows into data collection infrastructure in real time" },
+  "Social Networks→Mobile apps":                                                { type: "Mechanism",      desc: "Social networks are primarily consumed through mobile apps, amplifying their data collection reach via device sensors and background tracking" },
+  "Social Networks→Surveillance capacity":                                      { type: "Surveillance",   desc: "Social network data — social graphs, location check-ins, political views — is a primary intelligence source for state surveillance programs" },
+
+  // ── Streaming Platforms ──────────────────────────────────────────────────────
+  "Streaming Platforms→Recommendation algorithms":                              { type: "Mechanism",      desc: "Streaming platforms pioneered recommendation engines — Netflix's algorithm is estimated to influence 80% of content watched on the platform" },
+  "Streaming Platforms→Addictive design (infinite scroll, autoplay)":           { type: "Mechanism",      desc: "Autoplay, post-credit countdowns, and cliffhanger structuring are streaming-native addictive design patterns engineered to extend watch sessions" },
+  "Streaming Platforms→Psychographic profiling":                                { type: "Data Flow",      desc: "Viewing history, pause and rewind behaviour, and genre preferences reveal deep psychological and political traits used for profiling" },
+  "Streaming Platforms→Behaviour data (clicks, scroll, watch time)":            { type: "Data Flow",      desc: "Watch time, completion rates, skip behaviour, and rewatch patterns are the behavioral signals that drive streaming recommendation and ad systems" },
+  "Streaming Platforms→Platform dependency":                                    { type: "Lock-in",        desc: "Exclusive content libraries and personalised watch histories create switching costs — leaving means losing your data and access to original content" },
+  "Streaming Platforms→Ad targeting engine":                                    { type: "Data Flow",      desc: "Ad-supported streaming tiers use detailed viewer profiles to serve targeted ads — applying social network-style targeting to TV-scale audiences" },
+  "Streaming Platforms→Data collection infrastructure":                         { type: "Data Flow",      desc: "Every view, pause, and search on a streaming platform feeds into collection infrastructure that builds detailed taste and behaviour profiles" },
+  "Streaming Platforms→Mobile apps":                                            { type: "Mechanism",      desc: "Streaming apps on mobile extend data collection to location and device context, enriching viewer profiles beyond what smart TVs can capture" },
+
+  // ── Health & fitness data ────────────────────────────────────────────────────
+  "Health & fitness data→Data collection infrastructure":                       { type: "Data Flow",      desc: "Wearables, health apps, and period trackers continuously stream sensitive health signals into platform infrastructure" },
+  "Health & fitness data→Psychographic profiling":                              { type: "Data Flow",      desc: "Health patterns — sleep, exercise, stress, menstrual cycles — reveal personality, lifestyle, and vulnerability for profile enrichment" },
+  "Health & fitness data→Ad targeting engine":                                  { type: "Data Flow",      desc: "Health data enables condition-based ad targeting — pharmaceutical, insurance, and wellness advertisers pay premiums for health-inferred audiences" },
+  "Health & fitness data→AI training pipelines":                                { type: "Data Flow",      desc: "Health datasets are among the most valuable for training AI diagnostic and predictive models, often shared without explicit user awareness" },
+  "Health & fitness data→Surveillance capacity":                                { type: "Surveillance",   desc: "Health and fitness data enables tracking of pregnancy, disability, mental health, and political activity through physical patterns" },
+  "Health & fitness data→GDPR / data protection laws":                          { type: "Regulatory",     desc: "Health data is a special category under GDPR Article 9 requiring explicit consent — its commercial use is heavily restricted but frequently violated" },
+  "Health & fitness data→Right to be forgotten":                                { type: "Right",          desc: "Health data erasure is among the most critical GDPR rights — users seek deletion of sensitive medical and fitness records from app databases" },
+  "Health & fitness data→Consent (or lack of)":                                 { type: "Mechanism",      desc: "Health apps routinely bury consent to data sharing in ToS — users share sensitive health data without understanding where it goes" },
+  "Health & fitness data→Data brokers":                                         { type: "Data Flow",      desc: "Health app data is sold to data brokers who resell it to insurers, employers, and pharmaceutical companies without users' knowledge" },
+
+  // ── Search history ───────────────────────────────────────────────────────────
+  "Search history→Psychographic profiling":                                     { type: "Data Flow",      desc: "Search queries reveal health concerns, political views, financial worries, and personal crises — the most revealing data type for psychographic profiling" },
+  "Search history→Ad targeting engine":                                         { type: "Data Flow",      desc: "Search intent data is the highest-value advertising signal — someone searching for a product is far more targetable than someone who merely viewed it" },
+  "Search history→Data collection infrastructure":                              { type: "Data Flow",      desc: "Every search query is logged with timestamp, location, device, and session context — feeding a permanent behavioural record" },
+  "Search history→Recommendation algorithms":                                   { type: "Data Flow",      desc: "Search history feeds recommendation systems across platforms — what you search shapes what content, products, and information you're shown" },
+  "Search history→Search engines":                                              { type: "Data Flow",      desc: "Search engines are the primary collectors of search history — Google processes 8.5 billion searches daily, each logged to user profiles" },
+  "Search history→Surveillance capacity":                                       { type: "Surveillance",   desc: "Search history has been used in criminal prosecutions — police obtain search warrants for query histories to establish intent and location" },
+  "Search history→Right to be forgotten":                                       { type: "Right",          desc: "The right to be forgotten originated in a case about Google search results — users can request delisting of sensitive historical search-linked content" },
+  "Search history→GDPR / data protection laws":                                 { type: "Regulatory",     desc: "Search history is personal data under GDPR — its retention, profiling use, and cross-platform sharing requires a lawful basis" },
+
+  // ── Financial data ───────────────────────────────────────────────────────────
+  "Financial data→Psychographic profiling":                                     { type: "Data Flow",      desc: "Spending patterns reveal income, lifestyle, health conditions, political donations, and personal vulnerabilities used in psychographic profiles" },
+  "Financial data→Ad targeting engine":                                         { type: "Data Flow",      desc: "Purchase and income data enables precise wealth-based ad targeting — financial data is among the most commercially valuable profile inputs" },
+  "Financial data→Data brokers":                                                { type: "Data Flow",      desc: "Banks, credit bureaus, and fintech apps sell transaction data to brokers — financial profiles are combined with other data types for resale" },
+  "Financial data→Surveillance capacity":                                       { type: "Surveillance",   desc: "Financial transaction data enables state surveillance of political donations, activist funding, and cross-border payments" },
+  "Financial data→GDPR / data protection laws":                                 { type: "Regulatory",     desc: "Financial data is personal data under GDPR — open banking regulations and PSD2 intersect with data protection obligations" },
+  "Financial data→Right to be forgotten":                                       { type: "Right",          desc: "Users can request deletion of financial profiles held by data brokers, though credit records have legally mandated retention periods" },
+  "Financial data→Consent (or lack of)":                                        { type: "Mechanism",      desc: "Fintech apps and loyalty programmes collect financial data under broad ToS consent that users rarely understand or meaningfully agree to" },
+
+  // ── Search engines ───────────────────────────────────────────────────────────
+  "Search engines→Data collection infrastructure":                              { type: "Data Flow",      desc: "Search engines are one of the largest data collection surfaces — logging every query, click, and session across billions of users" },
+  "Search engines→Psychographic profiling":                                     { type: "Data Flow",      desc: "Search query history is the most intent-rich data source for psychographic profiling — revealing health, finance, politics, and personal concerns" },
+  "Search engines→Ad targeting engine":                                         { type: "Data Flow",      desc: "Search intent data powers the most valuable ad targeting signals — search advertising generates the highest ROI in digital advertising" },
+  "Search engines→Recommendation algorithms":                                   { type: "Mechanism",      desc: "Search ranking is itself a recommendation system — personalised results shape what information users find, creating filter bubbles" },
+  "Search engines→Surveillance capacity":                                       { type: "Surveillance",   desc: "Search engine logs are a primary target for law enforcement warrants and state intelligence collection — geofence and keyword warrants target search data" },
+  "Search engines→GDPR / data protection laws":                                 { type: "Regulatory",     desc: "The right to be forgotten originated as a case against Google Search — GDPR requires search engines to delist personal information upon valid request" },
+  "Search engines→Mobile apps":                                                 { type: "Mechanism",      desc: "Default search engine deals on mobile operating systems make search engines the gateway to the mobile web, locking in data collection" },
+
+  // ── Operating systems ────────────────────────────────────────────────────────
+  "Operating systems→Data collection infrastructure":                           { type: "Data Flow",      desc: "Operating systems have deeper data access than any app — keystrokes, app usage, file access, and all network traffic pass through the OS layer" },
+  "Operating systems→Mobile apps":                                              { type: "Mechanism",      desc: "Operating systems control app distribution, permissions, and background access — iOS and Android are gatekeepers for all mobile data collection" },
+  "Operating systems→Surveillance capacity":                                    { type: "Surveillance",   desc: "OS-level backdoors and lawful intercept capabilities give governments and intelligence agencies access below the application layer" },
+  "Operating systems→Network effects / lock-in":                                { type: "Lock-in",        desc: "App ecosystems built on iOS and Android create deep switching costs — all apps, purchases, and habits are OS-specific" },
+  "Operating systems→Platform dependency":                                      { type: "Lock-in",        desc: "Users are dependent on the operating system vendor for security updates, app access, and device functionality — a fundamental dependency layer" },
+  "Operating systems→Consent (or lack of)":                                     { type: "Mechanism",      desc: "OS-level permission systems determine what data apps can access — but permission dialogs are complex and users routinely grant broad access without understanding" },
+  "Operating systems→GDPR / data protection laws":                              { type: "Regulatory",     desc: "GDPR and the Digital Markets Act are increasingly targeting OS-level practices — app store rules, default apps, and telemetry collection are under scrutiny" },
+
+  // ── Data brokers ─────────────────────────────────────────────────────────────
+  "Data brokers→Psychographic profiling":                                       { type: "Data Flow",      desc: "Data brokers aggregate profiles from hundreds of sources to build the most comprehensive psychographic profiles available — sold to any paying buyer" },
+  "Data brokers→Ad targeting engine":                                           { type: "Data Flow",      desc: "Broker data enriches ad targeting with offline purchase history, financial status, health inferences, and location patterns unavailable to platforms alone" },
+  "Data brokers→Micro-targeting":                                               { type: "Enabler",        desc: "Data broker profiles enable micro-targeting at a level of detail platforms alone cannot achieve — combining online and offline data across all life domains" },
+  "Data brokers→Surveillance capacity":                                         { type: "Surveillance",   desc: "Law enforcement and intelligence agencies routinely purchase data broker profiles to circumvent warrant requirements for commercial data access" },
+  "Data brokers→Political ad spend":                                            { type: "Enabler",        desc: "Political campaigns buy voter profiles from data brokers to build the targeting datasets used in micro-targeted political advertising" },
+  "Data brokers→Accountability gaps":                                           { type: "Tension",        desc: "Data brokers operate almost entirely without transparency — users have no way to know their profile exists, what it contains, or who has bought it" },
+  "Data brokers→GDPR / data protection laws":                                   { type: "Regulatory",     desc: "Data brokers are a major target of GDPR enforcement — operating without lawful basis, selling sensitive inferences, and ignoring access/erasure requests" },
+  "Data brokers→Right to be forgotten":                                         { type: "Right",          desc: "Users can request deletion of broker profiles but the process is deliberately difficult — hundreds of brokers must be contacted individually" },
+
+  // ── Cloud infrastructure ─────────────────────────────────────────────────────
+  "Cloud infrastructure (AWS, Azure, GCP)→Data collection infrastructure":      { type: "Enabler",        desc: "Hyperscale cloud platforms provide the storage, compute, and global distribution that make mass data collection economically feasible at any scale" },
+  "Cloud infrastructure (AWS, Azure, GCP)→AI training pipelines":               { type: "Enabler",        desc: "GPU clusters and distributed compute on cloud platforms are what make large-scale AI model training on user data operationally possible" },
+  "Cloud infrastructure (AWS, Azure, GCP)→Surveillance capacity":               { type: "Surveillance",   desc: "Cloud providers hold vast amounts of data under legal jurisdiction — governments can compel access to data stored on US-based infrastructure via NSLs and CLOUD Act" },
+  "Cloud infrastructure (AWS, Azure, GCP)→Consent (or lack of)":               { type: "Mechanism",      desc: "Users rarely know which cloud provider holds their data, let alone consent to it — cloud infrastructure is invisible to the end-user consent process" },
+  "Cloud infrastructure (AWS, Azure, GCP)→GDPR / data protection laws":        { type: "Regulatory",     desc: "Data residency and cross-border transfer rules under GDPR directly constrain where cloud data can be stored — EU-US data transfers remain legally contested" },
+  "Cloud infrastructure (AWS, Azure, GCP)→Network effects / lock-in":          { type: "Lock-in",        desc: "Proprietary APIs, managed services, and data egress costs create deep cloud vendor lock-in — migrating data between providers is expensive and complex" },
+  "Cloud infrastructure (AWS, Azure, GCP)→Data brokers":                       { type: "Enabler",        desc: "Cloud infrastructure enables data brokers to store and process billions of records at low cost — the economics of data brokerage depend entirely on cheap cloud compute" },
+
+  // ── Cross-site tracking ──────────────────────────────────────────────────────
+  "Cross-site tracking (cookies, pixels)→Data collection infrastructure":       { type: "Mechanism",      desc: "Third-party cookies and tracking pixels are the primary mechanism by which platforms collect browsing data across websites they do not own" },
+  "Cross-site tracking (cookies, pixels)→Ad targeting engine":                  { type: "Data Flow",      desc: "Cross-site tracking feeds real-time browsing intent data into ad targeting engines — enabling retargeting based on pages visited outside the platform" },
+  "Cross-site tracking (cookies, pixels)→Psychographic profiling":              { type: "Data Flow",      desc: "Web browsing patterns across thousands of sites reveal interests, beliefs, health queries, and vulnerabilities used to build psychographic profiles" },
+  "Cross-site tracking (cookies, pixels)→Real-time bidding (RTB)":             { type: "Mechanism",      desc: "Cross-site tracking data is the payload in RTB bid requests — cookies and fingerprints tie browsing history to individual users auctioned in real time" },
+  "Cross-site tracking (cookies, pixels)→Dark patterns":                        { type: "Mechanism",      desc: "Cookie consent banners are deliberately designed as dark patterns — burying opt-out, pre-ticking boxes, and making rejection harder than acceptance" },
+  "Cross-site tracking (cookies, pixels)→GDPR / data protection laws":         { type: "Regulatory",     desc: "Third-party cookies require explicit consent under GDPR and ePrivacy — the enforcement of cookie rules has been a major focus of EU DPA actions" },
+  "Cross-site tracking (cookies, pixels)→Consent (or lack of)":                { type: "Mechanism",      desc: "Most cross-site tracking happens without meaningful consent — cookie walls, nudging, and consent fatigue mean users routinely accept tracking unknowingly" },
+  "Cross-site tracking (cookies, pixels)→Accountability gaps":                  { type: "Tension",        desc: "The cross-site tracking ecosystem involves hundreds of invisible third parties on every page load — users have no visibility into who is tracking them" },
+
+  // ── Real-time bidding (RTB) ──────────────────────────────────────────────────
+  "Real-time bidding (RTB)→Ad targeting engine":                                { type: "Mechanism",      desc: "RTB is the auction infrastructure through which the ad targeting engine sells access to individual users — billions of auctions run per day" },
+  "Real-time bidding (RTB)→Psychographic profiling":                            { type: "Data Flow",      desc: "Every RTB bid request broadcasts detailed user profile data to hundreds of bidders simultaneously — a structural data leak by design" },
+  "Real-time bidding (RTB)→Data collection infrastructure":                     { type: "Data Flow",      desc: "RTB bid requests contain precise location, device, browsing context, and inferred profile data — each impression is a data transmission event" },
+  "Real-time bidding (RTB)→Accountability gaps":                                { type: "Tension",        desc: "RTB broadcasts user data to hundreds of companies per impression with no audit trail — the IAB transparency framework is largely ineffective" },
+  "Real-time bidding (RTB)→GDPR / data protection laws":                        { type: "Regulatory",     desc: "RTB is under sustained GDPR challenge — the Belgian DPA ruled the IAB's Transparency & Consent Framework illegal in 2022" },
+  "Real-time bidding (RTB)→Micro-targeting":                                    { type: "Mechanism",      desc: "RTB enables micro-targeting at millisecond speed — matching user profiles to the highest-bidding advertiser for each individual impression" },
+  "Real-time bidding (RTB)→Ad revenue payment":                                 { type: "Revenue Flow",   desc: "RTB is the primary mechanism through which digital ad revenue is generated — the auction determines the price paid for each impression" },
+
+  // ── Data retention laws ──────────────────────────────────────────────────────
+  "Data retention laws→Surveillance capacity":                                  { type: "Governance",     desc: "Data retention mandates ensure governments can access historical communications and location data — expanding surveillance reach beyond real-time collection" },
+  "Data retention laws→State Surveillance":                                     { type: "Governance",     desc: "Mandatory data retention laws are the legal foundation of mass surveillance programs — requiring platforms to store data for government access" },
+  "Data retention laws→GDPR / data protection laws":                            { type: "Tension",        desc: "Data retention mandates directly conflict with GDPR's data minimisation principle — the CJEU has repeatedly struck down blanket retention laws as disproportionate" },
+  "Data retention laws→Data collection infrastructure":                         { type: "Governance",     desc: "Retention laws compel platforms to maintain infrastructure for storing user data far longer than commercial purposes require" },
+  "Data retention laws→National security agenda":                               { type: "Justification",  desc: "Data retention laws are justified under national security and counter-terrorism arguments, despite evidence that bulk retention is ineffective for these purposes" },
+
+  // ── Biometric databases ──────────────────────────────────────────────────────
+  "Biometric databases→State Surveillance":                                     { type: "Surveillance",   desc: "National biometric databases enable real-time identification of individuals in public spaces — used by police, border control, and intelligence agencies" },
+  "Biometric databases→Surveillance capacity":                                  { type: "Enabler",        desc: "Centralised biometric databases dramatically expand surveillance capacity — matching faces from CCTV feeds against millions of enrolled records" },
+  "Biometric databases→Biometric signals (face, voice)":                        { type: "Data Flow",      desc: "Biometric databases are built from signals collected across borders, police records, social media scraping, and mandatory enrollment programs" },
+  "Biometric databases→GDPR / data protection laws":                            { type: "Regulatory",     desc: "Biometric databases are subject to the strictest GDPR protections as special category data — many national databases exist in legal grey zones" },
+  "Biometric databases→AI training pipelines":                                  { type: "Data Flow",      desc: "State biometric databases are used to train facial recognition AI — Clearview AI scraped billions of social media photos to build its police database" },
+
+  // ── Digital Markets Act (DMA) ────────────────────────────────────────────────
+  "Digital Markets Act (DMA)→Network effects / lock-in":                        { type: "Intervention",   desc: "The DMA directly targets network effects lock-in by requiring gatekeepers to enable interoperability and third-party access" },
+  "Digital Markets Act (DMA)→Platform dependency":                              { type: "Intervention",   desc: "DMA provisions against self-preferencing and default app bundling are designed to reduce user and business dependency on gatekeeper platforms" },
+  "Digital Markets Act (DMA)→Data portability rules":                           { type: "Regulation",     desc: "The DMA strengthens data portability requirements for designated gatekeepers — going beyond GDPR to require real-time, machine-readable data transfer" },
+  "Digital Markets Act (DMA)→Regulatory Enforcement":                           { type: "Regulation",     desc: "DMA enforcement is handled by the European Commission directly — fines of up to 10% global turnover and structural remedies including break-up" },
+  "Digital Markets Act (DMA)→Lobbying":                                         { type: "Tension",        desc: "Big Tech lobbied aggressively to weaken DMA provisions — spending over €100 million on EU lobbying during the DMA's drafting phase" },
+
+  // ── CCPA / CPRA ──────────────────────────────────────────────────────────────
+  "CCPA / CPRA→Consent (or lack of)":                                           { type: "Regulation",     desc: "CCPA gives Californians the right to opt out of data sale — shifting from GDPR's opt-in consent model to an opt-out framework" },
+  "CCPA / CPRA→Right to be forgotten":                                          { type: "Right",          desc: "CCPA/CPRA grants California residents the right to delete personal information held by businesses — the US equivalent of GDPR's erasure right" },
+  "CCPA / CPRA→Data portability rules":                                         { type: "Right",          desc: "CCPA grants the right to know and receive personal data — establishing portability rights for California residents comparable to GDPR Article 20" },
+  "CCPA / CPRA→Regulatory Enforcement":                                         { type: "Mechanism",      desc: "CCPA enforcement by the California Privacy Protection Agency sets precedents that influence data practices nationally and globally" },
+  "CCPA / CPRA→GDPR / data protection laws":                                    { type: "Knowledge",      desc: "CCPA/CPRA and GDPR are increasingly converging — global platforms often apply the stricter standard across all users rather than jurisdiction-specific rules" },
+
+  // ── Fact-checking organisations ──────────────────────────────────────────────
+  "Fact-checking organisations→Recommendation algorithms":                      { type: "Tension",        desc: "Fact-checkers provide signals used by platforms to demote misinformation — but algorithm amplification of false content outpaces the correction rate" },
+  "Fact-checking organisations→Democratic accountability":                      { type: "Accountability", desc: "Fact-checking organisations hold politicians, platforms, and media accountable for false claims that undermine informed democratic participation" },
+  "Fact-checking organisations→Political ad spend":                             { type: "Accountability", desc: "Fact-checkers scrutinise political advertising for false claims — exposing the disinformation that targeted political ad campaigns often contain" },
+  "Fact-checking organisations→Civil advocacy":                                 { type: "Enabler",        desc: "Fact-checking findings provide civil advocacy organisations with evidence to campaign for platform content moderation and algorithmic accountability" },
+  "Fact-checking organisations→Investigative journalism":                       { type: "Knowledge",      desc: "Fact-checking and investigative journalism are complementary accountability mechanisms — fact-checkers verify specific claims while journalists investigate systemic issues" },
+
+  // ── Digital rights organisations ─────────────────────────────────────────────
+  "Digital rights organisations→Legislative power":                             { type: "Demand",         desc: "Digital rights organisations like EFF, Access Now, and EDRi directly lobby legislators and file amicus briefs shaping data protection law globally" },
+  "Digital rights organisations→GDPR / data protection laws":                   { type: "Accountability", desc: "Digital rights organisations file strategic GDPR complaints that trigger landmark enforcement — noyb's Max Schrems cases created Schrems I and II" },
+  "Digital rights organisations→Civil advocacy":                                { type: "Knowledge",      desc: "Digital rights organisations provide civil advocacy with technical expertise, legal strategies, and international coordination capacity" },
+  "Digital rights organisations→Legal challenges":                              { type: "Mechanism",      desc: "Digital rights organisations are the primary initiators of strategic legal challenges to surveillance, data collection, and algorithmic harms" },
+  "Digital rights organisations→Privacy research":                              { type: "Knowledge",      desc: "Digital rights organisations conduct and commission privacy research that exposes platform practices and informs regulatory action" },
+  "Digital rights organisations→Democratic accountability":                     { type: "Accountability", desc: "Digital rights organisations hold governments and platforms accountable for surveillance overreach, censorship, and data rights violations" },
+
+  // ── Data trusts ──────────────────────────────────────────────────────────────
+  "Data trusts→Data ownership model":                                           { type: "Mechanism",      desc: "Data trusts implement the data ownership model through legal structures — a trustee holds data on behalf of individuals, enforcing their rights collectively" },
+  "Data trusts→Consent-Based Sharing":                                          { type: "Mechanism",      desc: "Data trusts operationalise consent-based sharing at scale — negotiating terms with data users on behalf of the community of data subjects" },
+  "Data trusts→User-Owned Data":                                                { type: "Enabler",        desc: "Data trusts provide the legal infrastructure for user-owned data — individuals contribute data under terms the trust enforces on their behalf" },
+  "Data trusts→Privacy research":                                               { type: "Enabler",        desc: "Data trusts can make data available for privacy-safe research under controlled conditions, enabling research without surveillance-model data access" },
+  "Data trusts→Democratic governance":                                          { type: "Governance",     desc: "Data trusts require democratic governance to set the terms under which data is shared and to represent the interests of all data contributors" },
+  "Data trusts→GDPR / data protection laws":                                    { type: "Compliance",     desc: "Data trusts are designed to be GDPR-compliant by design — the trustee structure ensures data subjects' rights are systematically upheld" },
+
+  // ── Differential privacy ─────────────────────────────────────────────────────
+  "Differential privacy→AI training pipelines":                                 { type: "Intervention",   desc: "Differential privacy enables AI models to be trained on sensitive data without exposing individuals — adding calibrated noise to protect privacy mathematically" },
+  "Differential privacy→Privacy research":                                      { type: "Knowledge",      desc: "Differential privacy is a foundational concept in privacy research — developed at Microsoft Research and now used by Apple and the US Census Bureau" },
+  "Differential privacy→Data collection infrastructure":                        { type: "Intervention",   desc: "Differential privacy can be applied at the collection layer — Apple's on-device DP means individual data never leaves the device in identifiable form" },
+  "Differential privacy→Federated learning":                                    { type: "Enabler",        desc: "Differential privacy and federated learning are complementary privacy-preserving techniques often deployed together for maximum privacy protection" },
+  "Differential privacy→Academic research":                                     { type: "Knowledge",      desc: "Differential privacy emerged from academic cryptography research and remains an active area of theoretical and applied academic work" },
+
+  // ── Platform cooperatives ────────────────────────────────────────────────────
+  "Platform cooperatives→Network effects / lock-in":                            { type: "Intervention",   desc: "Platform cooperatives challenge network lock-in by making users co-owners — switching costs are lower when users own the platform they're leaving" },
+  "Platform cooperatives→Democratic governance":                                { type: "Governance",     desc: "Platform cooperatives are governed democratically by their worker and user members — a direct alternative to shareholder-controlled platform governance" },
+  "Platform cooperatives→Value Return to Users":                                { type: "Mechanism",      desc: "Platform cooperatives return surplus value to members as dividends, lower fees, or improved services — inverting the extraction model" },
+  "Platform cooperatives→Platform dependency":                                  { type: "Intervention",   desc: "User/worker ownership reduces exploitative dependency — members have a voice in platform rules and cannot be arbitrarily deplatformed" },
+  "Platform cooperatives→Civil advocacy":                                       { type: "Enabler",        desc: "Platform cooperatives demonstrate viable alternatives to surveillance capitalism, providing civil advocacy with concrete proof-of-concept models" },
+  "Platform cooperatives→Data ownership model":                                 { type: "Governance",     desc: "Platform cooperatives implement data ownership through member control — data generated on the platform belongs to the collective, not external shareholders" },
+};
+
+// ════════════════════════════════════════════════════════
 // BUILD GRAPH DATA
 // ════════════════════════════════════════════════════════
 const nameMap = {};
 
-const STORAGE_KEY = 'modeds_nodes_v5';
+const STORAGE_KEY = 'modeds_nodes_v16';
 const _saved = localStorage.getItem(STORAGE_KEY);
 const _source = _saved ? JSON.parse(_saved) : RAW.map((c, i) => ({ id: i, name: c.name, cat: c.cat, deps: c.deps }));
 
@@ -758,6 +1233,7 @@ nodes.forEach((c, si) => {
     if (ti !== undefined) links.push({ source: si, target: ti });
   });
 });
+
 
 // ════════════════════════════════════════════════════════
 // LAYOUT
@@ -821,7 +1297,7 @@ function clusterForce(alpha) {
 
 const chargeForce  = d3.forceManyBody().strength(-160);
 const collideForce = d3.forceCollide(42);
-const linkForce    = d3.forceLink(links).id(d=>d.id).distance(60).strength(.25);
+const linkForce    = d3.forceLink(links).id(d=>d.id).distance(60).strength(.15);
 
 const sim = d3.forceSimulation(nodes)
   .alphaDecay(0.06)
@@ -831,7 +1307,11 @@ const sim = d3.forceSimulation(nodes)
   .force('collide', collideForce)
   .force('cluster', () => clusterForce(sim.alpha()))
   .force('x', d3.forceX(n => CAT[n.cat].cx * W).strength(n => CAT[n.cat].xyStrength || .20))
-  .force('y', d3.forceY(n => CAT[n.cat].cy * H).strength(n => CAT[n.cat].xyStrength || .20));
+  .force('y', d3.forceY(n => {
+    const base = CAT[n.cat].cy * H;
+    if (n.name === 'Behaviour data (clicks, scroll, watch time)') return base + 90;
+    return base;
+  }).strength(n => CAT[n.cat].xyStrength || .20));
 
 // ════════════════════════════════════════════════════════
 // DRAW
@@ -906,21 +1386,31 @@ function buildNodeAndLinkElements() {
   labelGs.append('text')
     .attr('class','node-label')
     .attr('text-anchor','middle')
-    .attr('dominant-baseline','central')
     .attr('y', 0)
     .attr('fill', d => CAT[d.cat].color)
-    .text(d => d.name.length > 38 ? d.name.slice(0,36)+'…' : d.name);
+    .each(function(d) {
+      const el = d3.select(this);
+      const parenIdx = d.name.indexOf('(');
+      if (parenIdx > 0) {
+        const line1 = d.name.slice(0, parenIdx).trim();
+        const line2 = d.name.slice(parenIdx).trim();
+        el.append('tspan').attr('x', 0).attr('dy', '-0.55em').text(line1);
+        el.append('tspan').attr('x', 0).attr('dy', '1.3em').text(line2);
+      } else {
+        const txt = d.name.length > 38 ? d.name.slice(0,36)+'…' : d.name;
+        el.append('tspan').attr('x', 0).attr('dy', '0.35em').text(txt);
+      }
+    });
 
   nodeSel.each(function() {
     const grp  = d3.select(this);
     const bbox = grp.select('.node-label').node().getBBox();
     const px = 7, py = 5;
-    const h = bbox.height + py * 2;
     grp.select('.node-label-bg')
       .attr('x', bbox.x - px)
-      .attr('y', -h / 2)
+      .attr('y', bbox.y - py)
       .attr('width',  bbox.width  + px * 2)
-      .attr('height', h);
+      .attr('height', bbox.height + py * 2);
   });
 }
 
@@ -990,8 +1480,8 @@ catLabelGroups.append('text').attr('class','cat-label-sub')
   .text(d => d.cfg.sub || '');
 
 // Embed icon + finalise layout for each pill
-const PILL_ICO_R     = 9;    // circle badge radius
-const PILL_ICO_SCALE = 0.60; // scale CAT_ICONS paths (±10 range → ±6)
+const PILL_ICO_R     = 13;   // circle badge radius
+const PILL_ICO_SCALE = 0.82; // scale CAT_ICONS paths (±10 range → ±8)
 const PILL_ICO_GAP   = 6;    // px between badge right-edge and text
 
 catLabelGroups.each(function(d) {
@@ -1253,6 +1743,32 @@ function showInfo(d) {
     d.deps.forEach(dep => { html += chipHtml(dep); });
     html += `</div>`;
   }
+
+  // Connection descriptions for all connections involving this node
+  const allDescs = [];
+  d.deps.forEach(dep => {
+    const info = LINK_DESC[`${d.name}→${dep}`];
+    if (info) allDescs.push({ dir: '→', name: dep, type: info.type, desc: info.desc });
+  });
+  usedBy.forEach(n => {
+    const info = LINK_DESC[`${n.name}→${d.name}`];
+    if (info) allDescs.push({ dir: '←', name: n.name, type: info.type, desc: info.desc });
+  });
+  if (allDescs.length) {
+    html += `<div class="info-section">Connection Description</div><div>`;
+    allDescs.forEach(c => {
+      html += `<div class="conn-desc-item">
+        <div class="conn-desc-header">
+          <span class="conn-desc-dir">${c.dir}</span>
+          <span class="conn-desc-name">${c.name}</span>
+          <span class="conn-desc-type">${c.type}</span>
+        </div>
+        <div class="conn-desc-text">${c.desc}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
   if (usedBy.length) {
     html += `<div class="info-section">Influenced by · <span style="color:#111">${usedBy.length}</span></div><div>`;
     usedBy.forEach(n => { html += chipHtml(n.name); });
@@ -1297,7 +1813,6 @@ function nodeOver(ev, d) {
   tip.innerHTML = `<strong>${d.name}</strong><br><span style="opacity:.7">${d.cat}</span><br>
     ${d.deps.length} affects · influenced by ${usedBy}`;
   tip.style.opacity = '1';
-  // t.applyX/Y gives coords in SVG element space, which equals graph-wrap local space
   const t = d3.zoomTransform(svg.node());
   const lx = t.applyX(d.x);
   const ly = t.applyY(d.y);
