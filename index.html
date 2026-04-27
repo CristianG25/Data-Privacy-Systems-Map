@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inequality System Mapping</title>
+  <title>Data &amp; Privacy System Mapping</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -196,7 +196,7 @@
 
     .hull-path {
       fill-opacity: .38; stroke-width: 1.5;
-      stroke-dasharray: 6,5; stroke-opacity: .45;
+      stroke-opacity: .45;
     }
     .cat-label-text {
       font-size: 14px; font-weight: 900;
@@ -292,19 +292,23 @@
       position: absolute; bottom: 18px; left: 50%;
       transform: translateX(-50%);
       display: flex; align-items: center; gap: 20px;
-      background: rgba(255,255,255,.92); border: 1px solid #e8e8e8;
-      padding: 7px 18px; border-radius: 20px;
+      background: rgba(255,255,255,.95); border: 1px solid #e0e0e0;
+      padding: 8px 20px; border-radius: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,.07);
       pointer-events: none; white-space: nowrap;
     }
-    .bl-item {
-      display: flex; align-items: center; gap: 6px;
+    .bl-legend-title {
+      font-size: 11px; font-weight: 800; color: #111;
+      letter-spacing: .04em; margin-right: 4px;
     }
-    .bl-dot {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    .bl-divider {
+      width: 1px; height: 14px; background: #e0e0e0; flex-shrink: 0;
+    }
+    .bl-item {
+      display: flex; align-items: center; gap: 7px;
     }
     .bl-label {
-      font-size: 11px; font-weight: 600;
+      font-size: 11px; font-weight: 500; color: #444;
     }
 
     /* ─── LIST VIEW ──────────────────────────────────────── */
@@ -439,7 +443,7 @@
 
 <!-- VIEW BAR -->
 <div id="view-bar">
-  <span id="view-bar-title">Group E - Inequality System Mapping</span>
+  <span id="view-bar-title">Group E - Data &amp; Privacy System Mapping</span>
   <div id="view-toggle">
     <button class="vt-btn active" id="btn-map" onclick="switchView('map')">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
@@ -557,80 +561,181 @@
 // CATEGORY DEFINITIONS
 // ════════════════════════════════════════════════════════
 const CAT = {
-  "Moral & Ethical": {
-    color: "#2e7d52", light: "#e6f4ec",
-    cx: .50, cy: .46, xyStrength: 0.60, clusterStrength: 0.50
+  "Users": {
+    color: "#1565c0", light: "#e3f0fb",
+    cx: .14, cy: .32, xyStrength: 0.65, clusterStrength: 0.55
   },
-  "Structural & Economic": {
-    color: "#8a6d00", light: "#fdf5d0",
-    cx: .22, cy: .50, xyStrength: 0.55, clusterStrength: 0.45
+  "Tech Platforms": {
+    color: "#283593", light: "#e8eaf6",
+    cx: .50, cy: .26, xyStrength: 0.70, clusterStrength: 0.60
   },
-  "Political & Institutional": {
-    color: "#b83232", light: "#fde8e8",
-    cx: .50, cy: .18, padScale: 0.9, xyStrength: 0.90, clusterStrength: 0.70
+  "Advertisers": {
+    color: "#bf360c", light: "#fbe9e7",
+    cx: .86, cy: .32, xyStrength: 0.65, clusterStrength: 0.55
   },
-  "Social & Cultural": {
-    color: "#7B2FBE", light: "#f0e6f8",
-    cx: .78, cy: .50, xyStrength: 0.60, clusterStrength: 0.50
+  "Governments": {
+    color: "#37474f", light: "#eceff1",
+    cx: .22, cy: .66, xyStrength: 0.60, clusterStrength: 0.50
   },
-  "Human Outcomes": {
-    color: "#1a5fa8", light: "#e3edf8",
-    cx: .50, cy: .78, xyStrength: 0.55, clusterStrength: 0.45
+  "Regulators": {
+    color: "#37474f", light: "#eceff1",
+    cx: .50, cy: .70, xyStrength: 0.60, clusterStrength: 0.50
+  },
+  "Civil Society": {
+    color: "#37474f", light: "#eceff1",
+    cx: .78, cy: .66, xyStrength: 0.60, clusterStrength: 0.50
+  },
+  "Data Cooperatives": {
+    color: "#2e7d32", light: "#e8f5e9",
+    cx: .50, cy: .88, xyStrength: 0.65, clusterStrength: 0.55,
+    sub: "Intervention Point"
   }
+};
+
+// ════════════════════════════════════════════════════════
+// CATEGORY ICONS  (SVG inner markup, 24×24 coordinate space)
+// ════════════════════════════════════════════════════════
+const CAT_ICONS = {
+  "Users": `
+    <circle cx="0" cy="-5" r="4.5"/>
+    <path d="M-9,8 C-9,0 9,0 9,8"/>`,
+  "Tech Platforms": `
+    <rect x="-9" y="-9" width="18" height="5" rx="1.5"/>
+    <rect x="-9" y="-2" width="18" height="5" rx="1.5"/>
+    <rect x="-9" y="5"  width="18" height="5" rx="1.5"/>
+    <circle cx="5.5" cy="-6.5" r="1.3" stroke="none" fill="currentColor"/>
+    <circle cx="5.5" cy="0.5"  r="1.3" stroke="none" fill="currentColor"/>
+    <circle cx="5.5" cy="7.5"  r="1.3" stroke="none" fill="currentColor"/>`,
+  "Advertisers": `
+    <path d="M-3,-5 L7,-9 L7,9 L-3,5 Z"/>
+    <rect x="-8" y="-2" width="5" height="7" rx="1"/>
+    <path d="M9,-6 Q14,0 9,6"/>`,
+  "Governments": `
+    <path d="M0,-10 L-11,1 L11,1 Z"/>
+    <rect x="-10" y="1" width="20" height="7"/>
+    <line x1="-12" y1="8" x2="12" y2="8"/>
+    <line x1="-6" y1="1" x2="-6" y2="8"/>
+    <line x1="0"  y1="1" x2="0"  y2="8"/>
+    <line x1="6"  y1="1" x2="6"  y2="8"/>`,
+  "Regulators": `
+    <path d="M0,-10 L9,-5.5 L9,1.5 Q9,8.5 0,11.5 Q-9,8.5 -9,1.5 L-9,-5.5 Z"/>
+    <path d="M-4,1 L-1,4.5 L5,-2.5" stroke-width="2.4"/>`,
+  "Civil Society": `
+    <circle cx="-5" cy="-6" r="3.5"/>
+    <circle cx="5"  cy="-6" r="3.5"/>
+    <path d="M-12,6 C-12,-1 0,-1 0,6"/>
+    <path d="M0,6 C0,-1 12,-1 12,6"/>`,
+  "Data Cooperatives": `
+    <circle cx="0"  cy="-8" r="3"/>
+    <circle cx="-8" cy="5"  r="3"/>
+    <circle cx="8"  cy="5"  r="3"/>
+    <line x1="-1.5" y1="-5.5" x2="-6"  y2="2.5"/>
+    <line x1="1.5"  y1="-5.5" x2="6"   y2="2.5"/>
+    <line x1="-5"   y1="5"    x2="5"   y2="5"/>`
 };
 
 // ════════════════════════════════════════════════════════
 // COMPONENT DATA  (name, category, depends-on relations)
 // ════════════════════════════════════════════════════════
 const RAW = [
-  // ── Structural & Economic ─────────────────────────────────
-  { name:"Global Economic Inequality",           cat:"Structural & Economic", deps:["Migration Pressures"] },
-  { name:"National Income Inequality",           cat:"Structural & Economic", deps:["Social Trust & Cohesion","Health Outcomes","Crime & Violence","Deaths of Despair","Political Instability / Populism","Status Competition & Social Comparison"] },
-  { name:"Wealth Concentration",                 cat:"Structural & Economic", deps:["Political Influence of Wealthy Actors"] },
-  { name:"Market Power & Monopolies",            cat:"Structural & Economic", deps:["Wealth Concentration"] },
-  { name:"Technological Change (Automation/AI)", cat:"Structural & Economic", deps:["Labor Market Precarity"] },
-  { name:"Globalization & Capital Mobility",     cat:"Structural & Economic", deps:["Labor Market Precarity","Political Instability / Populism"] },
-  { name:"Labor Market Precarity",               cat:"Structural & Economic", deps:["Deaths of Despair","Social Mobility"] },
-  { name:"Tax Structures",                       cat:"Structural & Economic", deps:["National Income Inequality","Wealth Concentration"] },
-  { name:"Welfare System Design",                cat:"Structural & Economic", deps:["Stigma Around Poverty","Social Trust & Cohesion","Social Mobility","Health Outcomes","Political Instability / Populism"] },
-  { name:"Public Goods & Social Infrastructure", cat:"Structural & Economic", deps:["Social Mobility","Health Outcomes"] },
+  // ── Users ────────────────────────────────────────────────
+  { name: "Generate Data",                              cat: "Users",             deps: ["Collect Data", "User-Owned Data"] },
+  { name: "Seek Services & Content",                    cat: "Users",             deps: ["Shape User Behavior"] },
+  { name: "Behaviour data (clicks, scroll, watch time)",cat: "Users",             deps: ["Data collection infrastructure"] },
+  { name: "Location data",                              cat: "Users",             deps: ["Ad targeting engine", "Surveillance capacity"] },
+  { name: "Photos & content uploads",                   cat: "Users",             deps: ["AI training pipelines"] },
+  { name: "Social graph (friends, follows)",            cat: "Users",             deps: ["Psychographic profiling"] },
+  { name: "Biometric signals (face, voice)",            cat: "Users",             deps: ["Data collection infrastructure"] },
+  { name: "Demand for rights",                          cat: "Users",             deps: ["GDPR / data protection laws"] },
+  { name: "Platform dependency",                        cat: "Users",             deps: ["Network effects / lock-in", "Consent (or lack of)"] },
+  { name: "Consent (or lack of)",                       cat: "Users",             deps: [] },
+  { name: "Digital literacy",                           cat: "Users",             deps: [] },
 
-  // ── Political & Institutional ─────────────────────────────
-  { name:"Political Influence of Wealthy Actors",   cat:"Political & Institutional", deps:["Regulatory Frameworks","Tax Structures","Welfare System Design"] },
-  { name:"Campaign Finance & Lobbying",             cat:"Political & Institutional", deps:[] },
-  { name:"Strength of Democratic Institutions",     cat:"Political & Institutional", deps:["Political Influence of Wealthy Actors","Welfare System Design"] },
-  { name:"Regulatory Frameworks",                   cat:"Political & Institutional", deps:["Market Power & Monopolies"] },
-  { name:"Administrative Burden & Access Barriers", cat:"Political & Institutional", deps:["Welfare System Design"] },
-  { name:"International Institutions",              cat:"Political & Institutional", deps:["Globalization & Capital Mobility"] },
+  // ── Tech Platforms ───────────────────────────────────────
+  { name: "Collect Data",                               cat: "Tech Platforms",    deps: ["Shape User Behavior", "Monetize Attention", "Reach Audiences"] },
+  { name: "Shape User Behavior",                        cat: "Tech Platforms",    deps: ["Seek Services & Content", "Generate Data"] },
+  { name: "Monetize Attention",                         cat: "Tech Platforms",    deps: ["Reach Audiences"] },
+  { name: "Data collection infrastructure",             cat: "Tech Platforms",    deps: ["Psychographic profiling"] },
+  { name: "Ad targeting engine",                        cat: "Tech Platforms",    deps: ["Micro-targeting"] },
+  { name: "AI training pipelines",                      cat: "Tech Platforms",    deps: ["A/B testing at scale"] },
+  { name: "Network effects / lock-in",                  cat: "Tech Platforms",    deps: [] },
+  { name: "Terms of Service",                           cat: "Tech Platforms",    deps: ["Consent (or lack of)"] },
+  { name: "Recommendation algorithms",                  cat: "Tech Platforms",    deps: ["Behaviour data (clicks, scroll, watch time)", "Data collection infrastructure"] },
+  { name: "Profit motive",                              cat: "Tech Platforms",    deps: ["Lobbying"] },
+  { name: "Lobbying",                                   cat: "Tech Platforms",    deps: ["Underfunding", "Legislative power"] },
+  { name: "Addictive design (infinite scroll, autoplay)",cat: "Tech Platforms",   deps: ["Platform dependency"] },
 
-  // ── Social & Cultural ─────────────────────────────────────
-  { name:"Meritocratic Narratives",                cat:"Social & Cultural", deps:["Public Perceptions of Deservingness","Status Competition & Social Comparison","Social Trust & Cohesion","Identity Politics & Polarization","Welfare System Design"] },
-  { name:"Status Competition & Social Comparison", cat:"Social & Cultural", deps:["Health Outcomes","Crime & Violence"] },
-  { name:"Social Trust & Cohesion",                cat:"Social & Cultural", deps:["Crime & Violence"] },
-  { name:"Stigma Around Poverty",                  cat:"Social & Cultural", deps:["Social Trust & Cohesion","Political Instability / Populism"] },
-  { name:"Cultural Norms About Fairness & Obligation", cat:"Social & Cultural", deps:["Public Perceptions of Deservingness","Welfare System Design","Tax Structures"] },
-  { name:"Identity Politics & Polarization",       cat:"Social & Cultural", deps:["Strength of Democratic Institutions"] },
-  { name:"Historical Legacies",                    cat:"Social & Cultural", deps:["National Income Inequality","Social Mobility","Welfare System Design"] },
+  // ── Advertisers ──────────────────────────────────────────
+  { name: "Promote Products",                           cat: "Advertisers",       deps: ["Monetize Attention"] },
+  { name: "Reach Audiences",                            cat: "Advertisers",       deps: ["Generate Data"] },
+  { name: "Psychographic profiling",                    cat: "Advertisers",       deps: [] },
+  { name: "Micro-targeting",                            cat: "Advertisers",       deps: ["Behaviour data (clicks, scroll, watch time)"] },
+  { name: "Ad revenue payment",                         cat: "Advertisers",       deps: ["Profit motive", "Recommendation algorithms"] },
+  { name: "Political ad spend",                         cat: "Advertisers",       deps: ["Digital literacy", "Democratic accountability"] },
+  { name: "Dark patterns",                              cat: "Advertisers",       deps: ["Consent (or lack of)"] },
+  { name: "Accountability gaps",                        cat: "Advertisers",       deps: ["Auditing powers"] },
+  { name: "A/B testing at scale",                       cat: "Advertisers",       deps: [] },
 
-  // ── Human Outcomes ────────────────────────────────────────
-  { name:"Health Outcomes",                cat:"Human Outcomes", deps:["Life Expectancy"] },
-  { name:"Social Mobility",               cat:"Human Outcomes", deps:[] },
-  { name:"Education Access & Quality",    cat:"Human Outcomes", deps:["Social Mobility","Meritocratic Narratives"] },
-  { name:"Crime & Violence",              cat:"Human Outcomes", deps:["Social Trust & Cohesion"] },
-  { name:"Deaths of Despair",             cat:"Human Outcomes", deps:["Life Expectancy"] },
-  { name:"Life Expectancy",               cat:"Human Outcomes", deps:[] },
-  { name:"Political Instability / Populism", cat:"Human Outcomes", deps:["Strength of Democratic Institutions"] },
-  { name:"Migration Pressures",           cat:"Human Outcomes", deps:["Political Instability / Populism"] },
+  // ── Governments ──────────────────────────────────────────
+  { name: "Data Regulation",                            cat: "Governments",       deps: ["Collect Data", "Monetize Attention", "Regulatory Enforcement"] },
+  { name: "State Surveillance",                         cat: "Governments",       deps: ["Collect Data", "Generate Data"] },
+  { name: "Surveillance capacity",                      cat: "Governments",       deps: ["Data collection infrastructure", "Location data"] },
+  { name: "Democratic accountability",                  cat: "Governments",       deps: [] },
+  { name: "Legislative power",                          cat: "Governments",       deps: ["Terms of Service"] },
+  { name: "National security agenda",                   cat: "Governments",       deps: ["GDPR / data protection laws"] },
 
-  // ── Moral & Ethical ───────────────────────────────────────
-  { name:"Competing Moral Frameworks",          cat:"Moral & Ethical", deps:["Welfare System Design"] },
-  { name:"Equality of Opportunity",             cat:"Moral & Ethical", deps:[] },
-  { name:"Equality of Condition",               cat:"Moral & Ethical", deps:[] },
-  { name:"Desert & Merit",                      cat:"Moral & Ethical", deps:[] },
-  { name:"Global vs National Obligation",       cat:"Moral & Ethical", deps:[] },
-  { name:"Charity vs Justice",                  cat:"Moral & Ethical", deps:[] },
-  { name:"Public Perceptions of Deservingness", cat:"Moral & Ethical", deps:["Welfare System Design"] },
-  { name:"Moral Licensing",                     cat:"Moral & Ethical", deps:["Public Perceptions of Deservingness"] },
+  // ── Regulators ───────────────────────────────────────────
+  { name: "Regulatory Enforcement",                     cat: "Regulators",        deps: ["Collect Data", "Monetize Attention"] },
+  { name: "Regulatory Fines",                           cat: "Regulators",        deps: ["Data Regulation", "Collect Data"] },
+  { name: "GDPR / data protection laws",                cat: "Regulators",        deps: ["Terms of Service"] },
+  { name: "Fines & penalties",                          cat: "Regulators",        deps: ["Profit motive"] },
+  { name: "Auditing powers",                            cat: "Regulators",        deps: ["Data collection infrastructure"] },
+  { name: "Right to be forgotten",                      cat: "Regulators",        deps: ["Consent (or lack of)"] },
+  { name: "Data portability rules",                     cat: "Regulators",        deps: ["Platform dependency", "Data ownership model"] },
+  { name: "Underfunding",                               cat: "Regulators",        deps: [] },
+
+  // ── Civil Society ────────────────────────────────────────
+  { name: "Privacy Research",                           cat: "Civil Society",     deps: ["Data Regulation", "Regulatory Enforcement"] },
+  { name: "Civil Advocacy",                             cat: "Civil Society",     deps: ["Data Regulation", "Promote Products", "Regulatory Enforcement"] },
+  { name: "Investigative journalism",                   cat: "Civil Society",     deps: ["GDPR / data protection laws"] },
+  { name: "Legal challenges",                           cat: "Civil Society",     deps: ["Fines & penalties"] },
+  { name: "Academic research",                          cat: "Civil Society",     deps: ["Legislative power"] },
+  { name: "Whistleblowing",                             cat: "Civil Society",     deps: ["Democratic accountability"] },
+  { name: "Data literacy campaigns",                    cat: "Civil Society",     deps: ["Digital literacy"] },
+  { name: "Public advocacy",                            cat: "Civil Society",     deps: ["Auditing powers"] },
+
+  // ── Data Cooperatives ────────────────────────────────────
+  { name: "User-Owned Data",                            cat: "Data Cooperatives", deps: ["Privacy Research", "Civil Advocacy"] },
+  { name: "Consent-Based Sharing",                      cat: "Data Cooperatives", deps: ["Collect Data", "Privacy Research"] },
+  { name: "Value Return to Users",                      cat: "Data Cooperatives", deps: ["Seek Services & Content", "Civil Advocacy"] },
+  { name: "Consent infrastructure",                     cat: "Data Cooperatives", deps: ["Consent (or lack of)", "Ad targeting engine"] },
+  { name: "Democratic governance",                      cat: "Data Cooperatives", deps: ["Platform dependency"] },
+  { name: "Revenue distribution",                       cat: "Data Cooperatives", deps: ["Behaviour data (clicks, scroll, watch time)"] },
+  { name: "Data ownership model",                       cat: "Data Cooperatives", deps: ["Consent (or lack of)"] },
+  { name: "Federated learning",                         cat: "Data Cooperatives", deps: ["Data collection infrastructure", "Academic research"] },
+  { name: "Public good funding",                        cat: "Data Cooperatives", deps: ["Legislative power"] },
+];
+
+// ════════════════════════════════════════════════════════
+// CATEGORY-LEVEL FLOW ARROWS  (drawn between hull ellipses)
+// ════════════════════════════════════════════════════════
+const CATEGORY_FLOWS = [
+  // Labeled solid arrows (from colored arrows in diagram)
+  { from:"Users",             to:"Tech Platforms",    label:"Data",                 color:"#1565c0", dash:null,  offset:-22, curve: 38 },
+  { from:"Tech Platforms",    to:"Users",             label:"Influence",             color:"#e65100", dash:null,  offset: 22, curve: 38 },
+  { from:"Tech Platforms",    to:"Advertisers",       label:"Targeting",             color:"#e65100", dash:null,  offset:-22, curve: 38 },
+  { from:"Advertisers",       to:"Tech Platforms",    label:"Revenue",               color:"#c8920a", dash:null,  offset: 22, curve: 38 },
+  { from:"Users",             to:"Data Cooperatives", label:"Control",               color:"#2e7d32", dash:null,  offset:  0, curve:-55 },
+  { from:"Data Cooperatives", to:"Civil Society",     label:"Disrupts / Rebalances", color:"#2e7d32", dash:"7,4", offset:  0, curve: 55 },
+  // Regulatory / oversight dotted arrows
+  { from:"Governments",       to:"Users",             label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28 },
+  { from:"Governments",       to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28 },
+  { from:"Regulators",        to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve:-28 },
+  { from:"Civil Society",     to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:-18, curve: 28 },
+  { from:"Civil Society",     to:"Tech Platforms",    label:"Accountability",         color:"#2e7d32", dash:"7,4", offset: 18, curve: 28 },
+  { from:"Civil Society",     to:"Advertisers",       label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve:-28 },
+  { from:"Governments",       to:"Regulators",        label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 18, noArrow: true },
+  { from:"Regulators",        to:"Civil Society",     label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 18, noArrow: true },
 ];
 
 // ════════════════════════════════════════════════════════
@@ -638,7 +743,7 @@ const RAW = [
 // ════════════════════════════════════════════════════════
 const nameMap = {};
 
-const STORAGE_KEY = 'modeds_nodes_v3';
+const STORAGE_KEY = 'modeds_nodes_v5';
 const _saved = localStorage.getItem(STORAGE_KEY);
 const _source = _saved ? JSON.parse(_saved) : RAW.map((c, i) => ({ id: i, name: c.name, cat: c.cat, deps: c.deps }));
 
@@ -680,14 +785,16 @@ const zoom = d3.zoom().scaleExtent([.15, 5]).on('zoom', e => {
   nodeSel.select('.node-label-g')
     .attr('transform', `translate(0,${R + 14 / k})`);
 
-  // Debounce simulation force spread (avoid restarting on every scroll tick)
-  clearTimeout(zoomSpreadTimer);
-  zoomSpreadTimer = setTimeout(() => {
-    chargeForce.strength(-400 * k);
-    collideForce.radius(70 * k);
-    linkForce.distance(100 * k);
-    sim.alpha(0.25).restart();
-  }, 120);
+  // Only restart sim for user-initiated zooms — not programmatic fitView calls
+  if (e.sourceEvent) {
+    clearTimeout(zoomSpreadTimer);
+    zoomSpreadTimer = setTimeout(() => {
+      chargeForce.strength(-160 * k);
+      collideForce.radius(42 * k);
+      linkForce.distance(60 * k);
+      sim.alpha(0.25).restart();
+    }, 120);
+  }
 });
 svg.call(zoom);
 
@@ -712,9 +819,9 @@ function clusterForce(alpha) {
   });
 }
 
-const chargeForce  = d3.forceManyBody().strength(-400);
-const collideForce = d3.forceCollide(70);
-const linkForce    = d3.forceLink(links).id(d=>d.id).distance(100).strength(.25);
+const chargeForce  = d3.forceManyBody().strength(-160);
+const collideForce = d3.forceCollide(42);
+const linkForce    = d3.forceLink(links).id(d=>d.id).distance(60).strength(.25);
 
 const sim = d3.forceSimulation(nodes)
   .alphaDecay(0.06)
@@ -729,10 +836,13 @@ const sim = d3.forceSimulation(nodes)
 // ════════════════════════════════════════════════════════
 // DRAW
 // ════════════════════════════════════════════════════════
-const hullLayer  = g.append('g').attr('class','hulls');
-const linkLayer  = g.append('g').attr('class','link-layer');
-const nodeLayer  = g.append('g').attr('class','node-layer');
-const labelLayer = g.append('g').attr('class','cat-labels');
+const hullLayer    = g.append('g').attr('class','hulls');
+const iconLayer    = g.append('g').attr('class','cat-icon-layer');
+const catFlowLayer = g.append('g').attr('class','cat-flow-layer');
+const linkLayer    = g.append('g').attr('class','link-layer');
+const nodeLayer    = g.append('g').attr('class','node-layer');
+const labelLayer   = g.append('g').attr('class','cat-labels');
+let catFlowGs;
 
 function curvePath(d) {
   const sx = d.source.x, sy = d.source.y;
@@ -762,7 +872,8 @@ function buildNodeAndLinkElements() {
     .attr('class','link')
     .attr('stroke','#ccc')
     .attr('stroke-width', 1)
-    .attr('fill','none');
+    .attr('fill','none')
+    .attr('opacity', 0);
 
   nodeSel = nodeLayer.selectAll('.node-g').data(nodes).enter()
     .append('g').attr('class','node-g')
@@ -815,47 +926,126 @@ function buildNodeAndLinkElements() {
 
 buildNodeAndLinkElements();
 
+// ── Category flow arrow elements (non-interactive) ───────
+function ellipseEdge(cx, cy, rx, ry, toX, toY) {
+  const dx = toX - cx, dy = toY - cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = dx / len, ny = dy / len;
+  const t = 1 / Math.sqrt((nx / rx) ** 2 + (ny / ry) ** 2);
+  return { x: cx + nx * t, y: cy + ny * t };
+}
+
+catFlowGs = catFlowLayer.selectAll('.cat-flow-g')
+  .data(CATEGORY_FLOWS).enter().append('g')
+  .attr('class', 'cat-flow-g')
+  .style('pointer-events', 'none');
+
+catFlowGs.append('path')
+  .attr('class', 'cat-flow-path')
+  .attr('fill', 'none')
+  .attr('stroke-width', 2)
+  .attr('stroke', d => d.color)
+  .attr('stroke-dasharray', d => d.dash || null)
+  .attr('marker-end', d => d.noArrow ? null : 'url(#arrow)')
+  .attr('opacity', 0.75);
+
+const labeledCatFlows = catFlowGs.filter(d => d.label.length > 0);
+labeledCatFlows.append('rect').attr('class', 'cat-flow-bg')
+  .attr('rx', 4).attr('ry', 4)
+  .attr('fill', '#fff').attr('fill-opacity', 0.88);
+labeledCatFlows.append('text').attr('class', 'cat-flow-label')
+  .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+  .attr('font-size', '10px').attr('font-weight', '700')
+  .attr('fill', d => d.color)
+  .text(d => d.label);
+
 // Category labels — white pill at top of each ellipse
 const catLabelData = Object.entries(CAT).map(([name, cfg]) => ({ name, cfg }));
 const catLabelGroups = labelLayer.selectAll('.cat-label-g').data(catLabelData).enter()
   .append('g').attr('class', 'cat-label-g');
 
 catLabelGroups.append('rect').attr('class','cat-label-bg')
-  .attr('rx', 4).attr('ry', 4).attr('fill', '#fff')
-  .attr('fill-opacity', .92)
+  .attr('rx', 6).attr('ry', 6).attr('fill', '#fff')
+  .attr('fill-opacity', .93)
   .attr('stroke', d => d.cfg.color)
   .attr('stroke-width', 1.5)
   .attr('stroke-opacity', 0.5);
 
+// Temporary start-anchor text so getBBox gives true width
 catLabelGroups.append('text').attr('class','cat-label-text')
-  .attr('text-anchor', 'middle')
+  .attr('text-anchor', 'start')
+  .attr('dominant-baseline', 'central')
   .attr('fill', d => d.cfg.color)
-  .attr('dy', 0)
+  .attr('y', 0)
   .text(d => d.name.toUpperCase());
 
 catLabelGroups.append('text').attr('class','cat-label-sub')
-  .attr('text-anchor', 'middle')
+  .attr('text-anchor', 'start')
+  .attr('dominant-baseline', 'central')
   .attr('fill', d => d.cfg.color)
-  .attr('dy', 10)
-  .attr('font-size', '6px')
+  .attr('font-size', '9px')
   .attr('font-weight', '500')
   .attr('letter-spacing', '.04em')
   .attr('opacity', .75)
   .text(d => d.cfg.sub || '');
 
-// Size bg rect to cover both text elements
-catLabelGroups.each(function() {
-  const grp = d3.select(this);
-  const b1 = grp.select('.cat-label-text').node().getBBox();
-  const b2 = grp.select('.cat-label-sub').node().getBBox();
-  const x  = Math.min(b1.x, b2.x);
-  const y  = Math.min(b1.y, b2.y);
-  const w  = Math.max(b1.x + b1.width, b2.x + b2.width) - x;
-  const h  = Math.max(b1.y + b1.height, b2.y + b2.height) - y;
-  const px = 6, py = 3;
-  grp.select('rect')
-    .attr('x', x - px).attr('y', y - py)
-    .attr('width', w + px*2).attr('height', h + py*2);
+// Embed icon + finalise layout for each pill
+const PILL_ICO_R     = 9;    // circle badge radius
+const PILL_ICO_SCALE = 0.60; // scale CAT_ICONS paths (±10 range → ±6)
+const PILL_ICO_GAP   = 6;    // px between badge right-edge and text
+
+catLabelGroups.each(function(d) {
+  const grp   = d3.select(this);
+  const tb    = grp.select('.cat-label-text').node().getBBox();
+  const textW = tb.width, textH = tb.height;
+  const pillW = PILL_ICO_R * 2 + PILL_ICO_GAP + textW;
+  const iconX = -pillW / 2 + PILL_ICO_R;
+  const textX = -pillW / 2 + PILL_ICO_R * 2 + PILL_ICO_GAP;
+
+  // Small circle badge behind icon
+  grp.append('circle')
+    .attr('class', 'cat-icon-circle')
+    .attr('cx', iconX).attr('cy', 0)
+    .attr('r', PILL_ICO_R)
+    .attr('fill', d.cfg.light)
+    .attr('stroke', d.cfg.color)
+    .attr('stroke-width', 1)
+    .attr('stroke-opacity', 0.45);
+
+  // Icon paths scaled to fit badge
+  grp.append('g')
+    .attr('class', 'cat-icon-inline')
+    .attr('transform', `translate(${iconX},0) scale(${PILL_ICO_SCALE})`)
+    .attr('stroke', d.cfg.color)
+    .attr('fill', 'none')
+    .attr('stroke-linecap', 'round')
+    .attr('stroke-linejoin', 'round')
+    .attr('stroke-width', String(1.6 / PILL_ICO_SCALE))
+    .attr('color', d.cfg.color)
+    .html(CAT_ICONS[d.name] || '');
+
+  // Stack main + sub text vertically when subtitle exists
+  const hasSub = !!d.cfg.sub;
+  let mainY = 0, subY = 0, totalTextH = textH;
+  if (hasSub) {
+    const sb   = grp.select('.cat-label-sub').node().getBBox();
+    const subH = sb.height;
+    totalTextH = textH + 2 + subH;
+    mainY = -(subH + 2) / 2;
+    subY  = mainY + textH / 2 + 2 + subH / 2;
+  }
+
+  grp.select('.cat-label-text').attr('x', textX).attr('y', mainY);
+  grp.select('.cat-label-sub').attr('x', textX).attr('y', subY);
+
+  // Size background pill to cover icon + text (+ subtitle if present)
+  const pillH = Math.max(totalTextH, PILL_ICO_R * 2);
+  const px = 8, py = 4;
+  grp.select('.cat-label-bg')
+    .attr('x', -pillW / 2 - px)
+    .attr('y', -pillH / 2 - py)
+    .attr('width',  pillW + px * 2)
+    .attr('height', pillH + py * 2);
 });
 
 // ════════════════════════════════════════════════════════
@@ -896,6 +1086,62 @@ function drawHulls() {
     if (!e) return '';
     return `translate(${e.cx}, ${e.cy - e.ry + 16})`;
   });
+
+  // Update category flow arrows (organic bezier curves)
+  if (catFlowGs) {
+    catFlowGs.each(function(d) {
+      const fe = ellipseMap[d.from], te = ellipseMap[d.to];
+      if (!fe || !te) return;
+
+      const dx = te.cx - fe.cx, dy = te.cy - fe.cy;
+      const len = Math.hypot(dx, dy) || 1;
+      const px = -dy / len, py = dx / len; // perpendicular unit vector
+      const off = d.offset || 0;
+
+      // Offset source/target centers for parallel arrows
+      const fxo = fe.cx + px * off, fyo = fe.cy + py * off;
+      const txo = te.cx + px * off, tyo = te.cy + py * off;
+
+      const sp = ellipseEdge(fe.cx, fe.cy, fe.rx, fe.ry, txo, tyo);
+      const ep = ellipseEdge(te.cx, te.cy, te.rx, te.ry, fxo, fyo);
+
+      const sox = sp.x + px * off, soy = sp.y + py * off;
+      const epx = ep.x + px * off, epy = ep.y + py * off;
+
+      // Quadratic bezier control point — perpendicular offset from midpoint
+      const adx = epx - sox, ady = epy - soy;
+      const alen = Math.hypot(adx, ady) || 1;
+      const apx = -ady / alen, apy = adx / alen;
+      const curve = d.curve || 0;
+      const cpx = (sox + epx) / 2 + apx * curve;
+      const cpy = (soy + epy) / 2 + apy * curve;
+
+      // Trim endpoint along bezier tangent so arrowhead sits flush
+      const tdx = epx - cpx, tdy = epy - cpy;
+      const tlen = Math.hypot(tdx, tdy) || 1;
+      const eox = epx - (tdx / tlen) * 10;
+      const eoy = epy - (tdy / tlen) * 10;
+
+      d3.select(this).select('.cat-flow-path')
+        .attr('d', `M${sox},${soy} Q${cpx},${cpy} ${eox},${eoy}`);
+
+      if (d.label) {
+        // Place label at bezier apex (t = 0.5)
+        const mx = 0.25 * sox + 0.5 * cpx + 0.25 * eox;
+        const my = 0.25 * soy + 0.5 * cpy + 0.25 * eoy;
+        const txt = d3.select(this).select('.cat-flow-label')
+          .attr('x', mx).attr('y', my);
+        try {
+          const bb = txt.node().getBBox();
+          const pad = 4;
+          d3.select(this).select('.cat-flow-bg')
+            .attr('x', bb.x - pad).attr('y', bb.y - pad)
+            .attr('width', bb.width + pad * 2).attr('height', bb.height + pad * 2);
+        } catch(e) {}
+      }
+    });
+  }
+
 }
 
 // ════════════════════════════════════════════════════════
@@ -947,6 +1193,7 @@ function applyHighlight(d) {
     .attr('marker-end', (_,i) => linkSet.has(i) ? 'url(#arrow)' : null);
 
   hullLayer.selectAll('.hull-path').attr('opacity', h => nodeSet.has(nodes.find(n=>n.cat===h.cat)?.id) ? .9 : .25);
+  catFlowLayer.selectAll('.cat-flow-g').attr('opacity', 0);
 }
 
 function clearHighlight() {
@@ -954,8 +1201,9 @@ function clearHighlight() {
   nodeSel.select('.node-label-g').attr('opacity',1);
   nodeSel.select('.node-label-bg').attr('fill','#fff');
   nodeSel.select('.node-label').attr('fill', n => CAT[n.cat].color);
-  linkSel.attr('opacity',.55).attr('stroke','#ccc').attr('stroke-width',1).attr('marker-end', null);
+  linkSel.attr('opacity', 0).attr('stroke','#ccc').attr('stroke-width',1).attr('marker-end', null);
   hullLayer.selectAll('.hull-path').attr('opacity',1);
+  catFlowLayer.selectAll('.cat-flow-g').attr('opacity', 0.75);
 }
 
 function nodeClick(ev, d) {
@@ -1212,13 +1460,25 @@ function fitView() {
   );
 }
 
-// Bottom legend
+// Bottom legend — flow types
 const blEl = document.getElementById('bottom-legend');
-Object.entries(CAT).forEach(([cat, cfg]) => {
+const FLOW_LEGEND = [
+  { label: 'Data flow',                    color: '#1565c0', dash: null,    w: 2 },
+  { label: 'Influence flow',               color: '#e65100', dash: null,    w: 2 },
+  { label: 'Money flow',                   color: '#c8920a', dash: null,    w: 2 },
+  { label: 'Regulatory / oversight flow',  color: '#888',    dash: '3,3',   w: 1.5 },
+  { label: 'Intervention / rebalancing',   color: '#2e7d32', dash: '7,4',   w: 2 },
+];
+blEl.innerHTML = '<span class="bl-legend-title">LEGEND</span><div class="bl-divider"></div>';
+FLOW_LEGEND.forEach(ft => {
   const item = document.createElement('div');
   item.className = 'bl-item';
-  item.innerHTML = `<div class="bl-dot" style="background:${cfg.color}"></div>
-    <span class="bl-label" style="color:${cfg.color}">${cat}</span>`;
+  const da = ft.dash ? `stroke-dasharray="${ft.dash}"` : '';
+  item.innerHTML = `
+    <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+      <line x1="0" y1="6" x2="28" y2="6" stroke="${ft.color}" stroke-width="${ft.w}" stroke-linecap="round" ${da}/>
+    </svg>
+    <span class="bl-label">${ft.label}</span>`;
   blEl.appendChild(item);
 });
 
