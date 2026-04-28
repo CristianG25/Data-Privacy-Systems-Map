@@ -514,6 +514,10 @@
           markerWidth="7" markerHeight="7" orient="auto">
           <path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/>
         </marker>
+        <marker id="arrow-rev" viewBox="0 0 10 10" refX="0" refY="5"
+          markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 Z" fill="context-stroke"/>
+        </marker>
       </defs>
     </svg>
     <div id="loading">
@@ -767,7 +771,7 @@ const CATEGORY_FLOWS = [
   { from:"Data Cooperatives", to:"Civil Society",     label:"Disrupts / Rebalances", color:"#2e7d32", dash:"7,4", offset:  0, curve: 55 },
   // Regulatory / oversight dotted arrows
   { from:"Governments",       to:"Users",             label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28 },
-  { from:"Governments",       to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28 },
+  { from:"Governments",       to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve: 28, bidir: true },
   { from:"Regulators",        to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:  0, curve:-28 },
   { from:"Civil Society",     to:"Tech Platforms",    label:"",                      color:"#aaa",    dash:"4,4", offset:-18, curve: 28 },
   { from:"Civil Society",     to:"Tech Platforms",    label:"Accountability",         color:"#2e7d32", dash:"7,4", offset: 18, curve: 28 },
@@ -1457,7 +1461,8 @@ catFlowGs.append('path')
   .attr('stroke-width', 2)
   .attr('stroke', d => d.color)
   .attr('stroke-dasharray', d => d.dash || null)
-  .attr('marker-end', d => d.noArrow ? null : 'url(#arrow)')
+  .attr('marker-end',   d => d.noArrow ? null : 'url(#arrow)')
+  .attr('marker-start', d => d.bidir  ? 'url(#arrow-rev)' : null)
   .attr('opacity', 0.75);
 
 const labeledCatFlows = catFlowGs.filter(d => d.label.length > 0);
