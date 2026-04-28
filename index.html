@@ -581,32 +581,32 @@
 const CAT = {
   "Users": {
     color: "#1565c0", light: "#e3f0fb",
-    cx: .08, cy: .30, xyStrength: 0.72, clusterStrength: 0.62
+    cx: .07, cy: .26, xyStrength: 0.88, clusterStrength: 0.78
   },
   "Tech Platforms": {
     color: "#283593", light: "#e8eaf6",
-    cx: .50, cy: .16, xyStrength: 0.72, clusterStrength: 0.65
+    cx: .50, cy: .14, xyStrength: 0.88, clusterStrength: 0.80
   },
   "Advertisers": {
     color: "#bf360c", light: "#fbe9e7",
-    cx: .92, cy: .30, xyStrength: 0.72, clusterStrength: 0.62
+    cx: .93, cy: .26, xyStrength: 0.88, clusterStrength: 0.78
   },
   "Governments": {
     color: "#37474f", light: "#eceff1",
-    cx: .16, cy: .65, xyStrength: 0.88, clusterStrength: 0.78
+    cx: .10, cy: .68, xyStrength: 0.92, clusterStrength: 0.82
   },
   "Regulators": {
     color: "#37474f", light: "#eceff1",
-    cx: .50, cy: .57, xyStrength: 0.88, clusterStrength: 0.78
+    cx: .50, cy: .58, xyStrength: 0.92, clusterStrength: 0.82
   },
   "Civil Society": {
     color: "#37474f", light: "#eceff1",
-    cx: .78, cy: .57, xyStrength: 0.88, clusterStrength: 0.78
+    cx: .82, cy: .58, xyStrength: 0.92, clusterStrength: 0.82
   },
   "Data Cooperatives": {
     color: "#2e7d32", light: "#e8f5e9",
-    cx: .50, cy: .88, xyStrength: 0.80, clusterStrength: 0.68,
-    sub: "Intervention Point"
+    cx: .50, cy: .88, xyStrength: 0.88, clusterStrength: 0.80,
+    sub: "Intervention Point", padScale: 0.80
   }
 };
 
@@ -1218,7 +1218,7 @@ const LINK_DESC = {
 // ════════════════════════════════════════════════════════
 const nameMap = {};
 
-const STORAGE_KEY = 'modeds_nodes_v16';
+const STORAGE_KEY = 'modeds_nodes_v17';
 const _saved = localStorage.getItem(STORAGE_KEY);
 const _source = _saved ? JSON.parse(_saved) : RAW.map((c, i) => ({ id: i, name: c.name, cat: c.cat, deps: c.deps }));
 
@@ -1295,6 +1295,26 @@ function clusterForce(alpha) {
   });
 }
 
+// Repels nodes away from foreign category centers to prevent circle overlap
+function clusterSeparationForce(alpha) {
+  const catList = Object.entries(CAT).map(([name, cfg]) => ({
+    name, cx: cfg.cx * W, cy: cfg.cy * H
+  }));
+  nodes.forEach(n => {
+    catList.forEach(c => {
+      if (c.name === n.cat) return;
+      const dx = n.x - c.cx, dy = n.y - c.cy;
+      const dist = Math.hypot(dx, dy) || 1;
+      const minDist = 230;
+      if (dist < minDist) {
+        const push = alpha * 1.2 * (minDist - dist) / minDist;
+        n.vx += (dx / dist) * push * 100;
+        n.vy += (dy / dist) * push * 100;
+      }
+    });
+  });
+}
+
 const chargeForce  = d3.forceManyBody().strength(-160);
 const collideForce = d3.forceCollide(42);
 const linkForce    = d3.forceLink(links).id(d=>d.id).distance(60).strength(.15);
@@ -1304,6 +1324,7 @@ const sim = d3.forceSimulation(nodes)
   .velocityDecay(0.5)
   .force('link',    linkForce)
   .force('charge',  chargeForce)
+  .force('separation', () => clusterSeparationForce(sim.alpha()))
   .force('collide', collideForce)
   .force('cluster', () => clusterForce(sim.alpha()))
   .force('x', d3.forceX(n => CAT[n.cat].cx * W).strength(n => CAT[n.cat].xyStrength || .20))
@@ -1541,9 +1562,8 @@ catLabelGroups.each(function(d) {
 // ════════════════════════════════════════════════════════
 // HULL — ellipses fitted to each category cluster
 // ════════════════════════════════════════════════════════
-const PAD_X = 50, PAD_Y = 44; // padding around nodes
-
 function drawHulls() {
+  const PAD_X = Math.max(28, W * 0.042), PAD_Y = Math.max(22, H * 0.063);
   const bycat = {};
   nodes.forEach(n => { (bycat[n.cat] = bycat[n.cat]||[]).push(n); });
 
@@ -2142,9 +2162,13 @@ window.filterTable = function() {
 window.addEventListener('resize', () => {
   W = container.clientWidth; H = container.clientHeight;
   svg.attr('viewBox', `0 0 ${W} ${H}`);
-  sim.force('x', d3.forceX(n=>CAT[n.cat].cx*W).strength(.12))
-     .force('y', d3.forceY(n=>CAT[n.cat].cy*H).strength(.12))
-     .alpha(.3).restart();
+  sim.force('x', d3.forceX(n => CAT[n.cat].cx * W).strength(n => CAT[n.cat].xyStrength || .20))
+     .force('y', d3.forceY(n => {
+       const base = CAT[n.cat].cy * H;
+       if (n.name === 'Behaviour data (clicks, scroll, watch time)') return base + 90;
+       return base;
+     }).strength(n => CAT[n.cat].xyStrength || .20))
+     .alpha(.4).restart();
 });
 </script>
 </body>
